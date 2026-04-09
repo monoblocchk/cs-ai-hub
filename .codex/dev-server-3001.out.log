@@ -1,0 +1,57 @@
+
+> monoblocc-cs-ai-hub@0.1.0 dev
+> next dev --hostname 127.0.0.1 --port 3001
+
+▲ Next.js 16.2.2 (Turbopack)
+- Local:         http://127.0.0.1:3001
+- Network:       http://127.0.0.1:3001
+✓ Ready in 639ms
+
+ GET / 200 in 1342ms (next.js: 1172ms, application-code: 170ms)
+ GET / 200 in 64ms (next.js: 6ms, application-code: 58ms)
+ GET / 200 in 45ms (next.js: 3ms, application-code: 42ms)
+✓ Compiled in 1574ms
+ GET / 200 in 284ms (next.js: 111ms, application-code: 173ms)
+ GET / 200 in 36ms (next.js: 6ms, application-code: 30ms)
+ GET / 200 in 291ms (next.js: 166ms, application-code: 126ms)
+✓ Compiled in 77ms
+ GET / 500 in 1213ms (next.js: 1022ms, application-code: 191ms)
+ GET / 500 in 21ms (next.js: 10ms, application-code: 12ms)
+ GET / 200 in 195ms (next.js: 117ms, application-code: 79ms)
+ GET / 200 in 56ms (next.js: 6ms, application-code: 49ms)
+✓ Compiled in 31ms
+ GET / 500 in 65ms (next.js: 51ms, application-code: 14ms)
+ GET / 500 in 20ms (next.js: 8ms, application-code: 13ms)
+ GET / 500 in 24ms (next.js: 13ms, application-code: 11ms)
+ GET / 500 in 32ms (next.js: 21ms, application-code: 11ms)
+✓ Compiled in 68ms
+ GET / 200 in 195ms (next.js: 93ms, application-code: 103ms)
+✓ Compiled in 41ms
+ GET / 200 in 139ms (next.js: 68ms, application-code: 71ms)
+✓ Compiled in 33ms
+ GET / 500 in 57ms (next.js: 47ms, application-code: 10ms)
+ GET / 500 in 20ms (next.js: 8ms, application-code: 11ms)
+ GET / 500 in 27ms (next.js: 13ms, application-code: 13ms)
+ GET / 500 in 35ms (next.js: 23ms, application-code: 12ms)
+✓ Compiled in 65ms
+ GET / 200 in 191ms (next.js: 89ms, application-code: 102ms)
+✓ Compiled in 23ms
+✓ Compiled in 28ms
+✓ Compiled in 31ms
+ GET / 200 in 117ms (next.js: 82ms, application-code: 35ms)
+✓ Compiled in 79ms
+✓ Compiled in 43ms
+ GET / 200 in 319ms (next.js: 126ms, application-code: 193ms)
+✓ Compiled in 31ms
+✓ Compiled in 36ms
+✓ Compiled in 65ms
+ GET / 200 in 179ms (next.js: 85ms, application-code: 94ms)
+✓ Compiled in 62ms
+✓ Compiled in 40ms
+✓ Compiled in 49ms
+ GET /allocation 404 in 553ms (next.js: 487ms, application-code: 66ms)
+ GET / 200 in 176ms (next.js: 91ms, application-code: 85ms)
+ GET /allocation 404 in 54ms (next.js: 10ms, application-code: 44ms)
+ GET /batches 404 in 47ms (next.js: 8ms, application-code: 39ms)
+ GET / 200 in 45ms (next.js: 5ms, application-code: 40ms)
+ GET /batches 404 in 35ms (next.js: 5ms, application-code: 30ms)

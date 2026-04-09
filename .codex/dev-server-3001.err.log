@@ -1,0 +1,802 @@
+⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mMetadata[0m } [36mfrom[0m [32m"next"[0m;
+  [90m2 |[0m [36mimport[0m { [33mIBM_Plex_Mono[0m, [33mIBM_Plex_Sans[0m } [36mfrom[0m [32m"next/font/google"[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [32m"./globals.css"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+  [90m5 |[0m [36mconst[0m plexSans = [33mIBM_Plex_Sans[0m({
+  [90m6 |[0m   variable: [32m"--font-plex-sans"[0m,
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mMetadata[0m } [36mfrom[0m [32m"next"[0m;
+  [90m2 |[0m [36mimport[0m { [33mIBM_Plex_Mono[0m, [33mIBM_Plex_Sans[0m } [36mfrom[0m [32m"next/font/google"[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [32m"./globals.css"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+  [90m5 |[0m [36mconst[0m plexSans = [33mIBM_Plex_Sans[0m({
+  [90m6 |[0m   variable: [32m"--font-plex-sans"[0m,
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mMetadata[0m } [36mfrom[0m [32m"next"[0m;
+  [90m2 |[0m [36mimport[0m { [33mIBM_Plex_Mono[0m, [33mIBM_Plex_Sans[0m } [36mfrom[0m [32m"next/font/google"[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [32m"./globals.css"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+  [90m5 |[0m [36mconst[0m plexSans = [33mIBM_Plex_Sans[0m({
+  [90m6 |[0m   variable: [32m"--font-plex-sans"[0m,
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mMetadata[0m } [36mfrom[0m [32m"next"[0m;
+  [90m2 |[0m [36mimport[0m { [33mIBM_Plex_Mono[0m, [33mIBM_Plex_Sans[0m } [36mfrom[0m [32m"next/font/google"[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [32m"./globals.css"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+  [90m5 |[0m [36mconst[0m plexSans = [33mIBM_Plex_Sans[0m({
+  [90m6 |[0m   variable: [32m"--font-plex-sans"[0m,
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mMetadata[0m } [36mfrom[0m [32m"next"[0m;
+  [90m2 |[0m [36mimport[0m { [33mIBM_Plex_Mono[0m, [33mIBM_Plex_Sans[0m } [36mfrom[0m [32m"next/font/google"[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [32m"./globals.css"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+  [90m5 |[0m [36mconst[0m plexSans = [33mIBM_Plex_Sans[0m({
+  [90m6 |[0m   variable: [32m"--font-plex-sans"[0m,
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mMetadata[0m } [36mfrom[0m [32m"next"[0m;
+  [90m2 |[0m [36mimport[0m { [33mIBM_Plex_Mono[0m, [33mIBM_Plex_Sans[0m } [36mfrom[0m [32m"next/font/google"[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [32m"./globals.css"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+  [90m5 |[0m [36mconst[0m plexSans = [33mIBM_Plex_Sans[0m({
+  [90m6 |[0m   variable: [32m"--font-plex-sans"[0m,
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[browser] ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const plexSans = IBM_Plex_Sans({
+  6 |   variable: "--font-plex-sans",
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const plexSans = IBM_Plex_Sans({
+  6 |   variable: "--font-plex-sans",
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const plexSans = IBM_Plex_Sans({
+  6 |   variable: "--font-plex-sans",
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+[browser] ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const plexSans = IBM_Plex_Sans({
+  6 |   variable: "--font-plex-sans",
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+⨯ ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  [90m1 |[0m [36mimport[0m [36mtype[0m { [33mMetadata[0m } [36mfrom[0m [32m"next"[0m;
+  [90m2 |[0m [36mimport[0m { [33mIBM_Plex_Mono[0m, [33mIBM_Plex_Sans[0m } [36mfrom[0m [32m"next/font/google"[0m;
+[31m[1m>[0m [90m3 |[0m [36mimport[0m [32m"./globals.css"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m4 |[0m
+  [90m5 |[0m [36mconst[0m plexSans = [33mIBM_Plex_Sans[0m({
+  [90m6 |[0m   variable: [32m"--font-plex-sans"[0m,
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[browser] Uncaught Error: ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const plexSans = IBM_Plex_Sans({
+  6 |   variable: "--font-plex-sans",
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/layout.tsx:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (Error: (./src/app/layout.tsx:3:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const plexSans = IBM_Plex_Sans({
+  6 |   variable: "--font-plex-sans",
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/layout.tsx:3:1
+Module not found: Can't resolve './globals.css'
+  1 | import type { Metadata } from "next";
+  2 | import { IBM_Plex_Mono, IBM_Plex_Sans } from "next/font/google";
+> 3 | import "./globals.css";
+    | ^^^^^^^^^^^^^^^^^^^^^^^
+  4 |
+  5 | const plexSans = IBM_Plex_Sans({
+  6 |   variable: "--font-plex-sans",
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[browser] Uncaught Error: ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+> 1 | import { InboxWorkspace } from "@/components/inbox-workspace";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 |
+  3 | export default function Home() {
+  4 |   return <InboxWorkspace />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/page.tsx:1:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (Error: (./src/app/page.tsx:1:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+[31m[1m>[0m [90m1 |[0m [36mimport[0m { [33mInboxWorkspace[0m } [36mfrom[0m [32m"@/components/inbox-workspace"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m2 |[0m
+  [90m3 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mHome[0m() {
+  [90m4 |[0m   [36mreturn[0m <[33mInboxWorkspace[0m />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[browser] Uncaught Error: ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+> 1 | import { InboxWorkspace } from "@/components/inbox-workspace";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 |
+  3 | export default function Home() {
+  4 |   return <InboxWorkspace />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/page.tsx:1:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (Error: (./src/app/page.tsx:1:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+> 1 | import { InboxWorkspace } from "@/components/inbox-workspace";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 |
+  3 | export default function Home() {
+  4 |   return <InboxWorkspace />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+> 1 | import { InboxWorkspace } from "@/components/inbox-workspace";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 |
+  3 | export default function Home() {
+  4 |   return <InboxWorkspace />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+> 1 | import { InboxWorkspace } from "@/components/inbox-workspace";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 |
+  3 | export default function Home() {
+  4 |   return <InboxWorkspace />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] ./src/app/page.tsx:1:1
+Module not found: Can't resolve '@/components/inbox-workspace'
+> 1 | import { InboxWorkspace } from "@/components/inbox-workspace";
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  2 |
+  3 | export default function Home() {
+  4 |   return <InboxWorkspace />;
+
+Import map: aliased to relative './src/components/inbox-workspace' inside of [project]/
+
+https://nextjs.org/docs/messages/module-not-found 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2834:28)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2679:13)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2324:17) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0pe1dg-._.js:2773:21)
+[browser] In HTML, <button> cannot be a descendant of <button>.
+This will cause a hydration error.
+
+  ...
+    <RedirectBoundary>
+      <RedirectErrorBoundary router={{...}}>
+        <InnerLayoutRouter url="/" tree={[...]} params={{}} cacheNode={{rsc:{...}, ...}} segmentPath={[...]} ...>
+          <SegmentViewNode type="page" pagePath="page.tsx">
+            <SegmentTrieNode>
+            <Home>
+              <InboxWorkspace>
+                <main className="min-h-scre...">
+                  <section className="grid min-h...">
+                    <aside>
+                    <section>
+                    <section className="flex min-h...">
+                      <header>
+                      <div className="scroll-sub...">
+                        <div className="mx-auto fl...">
+                          <MessageRow>
+                          <MessageRow>
+                          <MessageRow>
+                          <div className="mt-2 flex ...">
+                            <DraftBubble draft={{key:"support", ...}} onEdit={function onEdit} onSend={function onSend}>
+                              <div className="flex justi...">
+>                               <button
+>                                 type="button"
+>                                 onClick={function onSend}
+>                                 className="flex w-full max-w-[82%] items-start gap-3 rounded-[12px] border border-da..."
+>                               >
+                                  <div>
+>                                 <button
+>                                   type="button"
+>                                   onClick={function onClick}
+>                                   className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border b..."
+>                                   aria-label="Edit Support draft"
+>                                 >
+                            ...
+                      ...
+                    ...
+          ...
+        ...
+ 
+    at validateDOMNesting (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:1963:372)
+    at beginWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6758:104)
+    at runWithFiberInDEV (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopConcurrentByScheduler (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9551:58)
+    at renderRootConcurrent (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9534:71)
+    at performWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:2647:64) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:1963:372)
+[browser] Uncaught Error: Hydration failed because the server rendered HTML didn't match the client. As a result this tree will be regenerated on the client. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+    at <unknown> (https://react.dev/link/hydration-mismatch)
+    at throwOnHydrationMismatch (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:3318:56)
+    at beginWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6758:918)
+    at runWithFiberInDEV (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopConcurrentByScheduler (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9551:58)
+    at renderRootConcurrent (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9534:71)
+    at performWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:2647:64)
+    at button (<anonymous>)
+    at DraftBubble (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/_128-.k2._.js:1678:219)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/_128-.k2._.js:1250:283)
+    at Array.map (<anonymous>)
+    at InboxWorkspace (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/_128-.k2._.js:1250:68)
+    at Home (src\app\page.tsx:4:10)
+  2 |
+  3 | export default function Home() {
+> 4 |   return <InboxWorkspace />;
+    |          ^
+  5 | }
+  6 |
+[browser] ./src/components/inbox-workspace.tsx:416:18
+Expected ',', got ';'
+  414 |     conversation.channelId === "instagram-comments" || conversation.channelId === "whatsapp"
+  415 |       ? "short"
+> 416 |       : "support";
+      |                  ^
+  417 |   ) as DraftChoice["key"];
+  418 |
+  419 |   const support = conversation.drafts.support[0]?.body ?? "";
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./src/components/inbox-workspace.tsx
+    ./src/app/page.tsx 
+    at handleErrors (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
+    at processMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13891:21)
+    at WebSocket.handleMessage (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13335:52) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_client_0fhqo1d._.js:13828:21)
