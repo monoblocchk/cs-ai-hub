@@ -3989,3 +3989,143 @@ https://nextjs.org/docs/messages/module-not-found
   6 |
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⨯ TypeError: modelOverride.trim is not a function
+    at buildDraftCacheKey (src\components\inbox-workspace.tsx:136:34)
+    at InboxWorkspace (src\components\inbox-workspace.tsx:342:7)
+  134 |     knowledgeSignature,
+  135 |     messageCount: conversation.messages.length,
+> 136 |     modelOverride: modelOverride.trim(),
+      |                                  ^
+  137 |     profileId,
+  138 |     providerRouteId,
+  139 |     unreadCount: conversation.unreadCount, {
+  digest: '4092456555'
+}
+⨯ TypeError: modelOverride.trim is not a function
+    at buildDraftCacheKey (src\components\inbox-workspace.tsx:136:34)
+    at InboxWorkspace (src\components\inbox-workspace.tsx:342:7)
+  134 |     knowledgeSignature,
+  135 |     messageCount: conversation.messages.length,
+> 136 |     modelOverride: modelOverride.trim(),
+      |                                  ^
+  137 |     profileId,
+  138 |     providerRouteId,
+  139 |     unreadCount: conversation.unreadCount, {
+  digest: '4092456555'
+}
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+[browser] The final argument passed to useEffect changed size between renders. The order and size of this array must remain constant.
+
+Previous: [[object Object], [object Object], {"channelId":"instagram-comments","conversationId":"conv-iris","guidance":{"channel":"","styles":{"support":"","sales":"","short":"","formal":"","hype":""}},"lastMessageId":"m3","knowledgeSignature":"magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active","messageCount":3,"modelOverride":"","profileId":"draft_quality","providerRouteId":"mock","unreadCount":2,"updatedAt":"2 min ago"}, [object Object],[object Object],[object Object],[object Object],[object Object], false, magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active, , [object Object], draft_quality, mock, [object Object]]
+Incoming: [[object Object], [object Object], {"channelId":"instagram-comments","conversationId":"conv-iris","guidance":{"channel":"","styles":{"support":"","sales":"","short":"","formal":"","hype":""}},"lastMessageId":"m3","knowledgeSignature":"magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active","messageCount":3,"modelOverride":"","profileId":"draft_quality","providerRouteId":"mock","unreadCount":2,"updatedAt":"2 min ago"}, false, magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active, , [object Object], draft_quality, mock, [object Object]] 
+    at areHookInputsEqual (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4604:56)
+    at updateEffectImpl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:5300:50)
+    at Object.useEffect (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15568:13)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:1722:36)
+    at InboxWorkspace (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/src_01ch5la._.js?id=%255Bproject%255D%252Fsrc%252Fcomponents%252Finbox-workspace.tsx+%255Bapp-client%255D+%2528ecmascript%2529:221:180)
+    at Object.react_stack_bottom_frame (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15037:24)
+    at renderWithHooksAgain (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4675:24)
+    at renderWithHooks (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4626:28)
+    at updateFunctionComponent (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6081:21)
+    at beginWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6691:24)
+    at runWithFiberInDEV (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopSync (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9449:40)
+    at renderRootSync (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9433:13)
+    at performWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:186)
+    at performSyncWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10179:316)
+    at flushSyncWork$1 (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9230:86)
+    at Object.scheduleRefresh (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:299:13)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:391:33)
+    at Set.forEach (<anonymous>)
+    at Object.performReactRefresh (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:384:38)
+    at applyUpdate (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:878:31)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:886:13) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4604:56)
+[browser] The final argument passed to useEffect changed size between renders. The order and size of this array must remain constant.
+
+Previous: [[object Object], [object Object], {"channelId":"instagram-comments","conversationId":"conv-iris","guidance":{"channel":"","styles":{"support":"","sales":"","short":"","formal":"","hype":""}},"lastMessageId":"m3","knowledgeSignature":"magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active","messageCount":3,"modelOverride":"","profileId":"draft_quality","providerRouteId":"mock","unreadCount":2,"updatedAt":"2 min ago"}, false, magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active, , [object Object], draft_quality, mock, [object Object]]
+Incoming: [[object Object], [object Object], {"channelId":"instagram-comments","conversationId":"conv-iris","guidance":{"channel":"","styles":{"support":"","sales":"","short":"","formal":"","hype":""}},"lastMessageId":"m3","knowledgeSignature":"magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active","messageCount":3,"modelOverride":"","profileId":"draft_quality","providerRouteId":"mock","unreadCount":2,"updatedAt":"2 min ago"}, false, magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active, [object Object],[object Object],[object Object],[object Object],[object Object], , [object Object], draft_quality, mock, [object Object]] 
+    at areHookInputsEqual (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4604:56)
+    at updateEffectImpl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:5300:50)
+    at Object.useEffect (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15568:13)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:1722:36)
+    at InboxWorkspace (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/src_01ch5la._.js?id=%255Bproject%255D%252Fsrc%252Fcomponents%252Finbox-workspace.tsx+%255Bapp-client%255D+%2528ecmascript%2529:223:180)
+    at Object.react_stack_bottom_frame (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15037:24)
+    at renderWithHooksAgain (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4675:24)
+    at renderWithHooks (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4626:28)
+    at updateFunctionComponent (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6081:21)
+    at beginWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6691:24)
+    at runWithFiberInDEV (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopSync (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9449:40)
+    at renderRootSync (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9433:13)
+    at performWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:186)
+    at performSyncWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10179:316)
+    at flushSyncWork$1 (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9230:86)
+    at Object.scheduleRefresh (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:299:13)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:391:33)
+    at Set.forEach (<anonymous>)
+    at Object.performReactRefresh (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:384:38)
+    at applyUpdate (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:878:31)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:886:13) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4604:56)
+[browser] The final argument passed to useEffect changed size between renders. The order and size of this array must remain constant.
+
+Previous: [[object Object], [object Object], {"channelId":"instagram-comments","conversationId":"conv-iris","guidance":{"channel":"","styles":{"support":"","sales":"","short":"","formal":"","hype":""}},"lastMessageId":"m3","knowledgeSignature":"magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active","messageCount":3,"modelOverride":"","profileId":"draft_quality","providerRouteId":"mock","unreadCount":2,"updatedAt":"2 min ago"}, [object Object],[object Object],[object Object],[object Object],[object Object], false, magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active, , [object Object], draft_quality, mock, [object Object]]
+Incoming: [[object Object], [object Object], {"channelId":"instagram-comments","conversationId":"conv-iris","guidance":{"channel":"","styles":{"support":"","sales":"","short":"","formal":"","hype":""}},"lastMessageId":"m3","knowledgeSignature":"magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active","messageCount":3,"modelOverride":"","profileId":"draft_quality","providerRouteId":"mock","unreadCount":2,"updatedAt":"2 min ago"}, false, magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active, , [object Object], draft_quality, mock, [object Object]] 
+    at areHookInputsEqual (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4604:56)
+    at updateEffectImpl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:5300:50)
+    at Object.useEffect (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15568:13)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:1722:36)
+    at InboxWorkspace (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/src_01ch5la._.js?id=%255Bproject%255D%252Fsrc%252Fcomponents%252Finbox-workspace.tsx+%255Bapp-client%255D+%2528ecmascript%2529:221:180)
+    at Object.react_stack_bottom_frame (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15037:24)
+    at renderWithHooksAgain (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4675:24)
+    at renderWithHooks (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4626:28)
+    at updateFunctionComponent (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6081:21)
+    at beginWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6691:24)
+    at runWithFiberInDEV (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopSync (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9449:40)
+    at renderRootSync (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9433:13)
+    at performWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:186)
+    at performSyncWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10179:316)
+    at flushSyncWork$1 (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9230:86)
+    at Object.scheduleRefresh (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:299:13)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:391:33)
+    at Set.forEach (<anonymous>)
+    at Object.performReactRefresh (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:384:38)
+    at applyUpdate (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:878:31)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:886:13) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4604:56)
+[browser] The final argument passed to useEffect changed size between renders. The order and size of this array must remain constant.
+
+Previous: [[object Object], [object Object], {"channelId":"instagram-comments","conversationId":"conv-iris","guidance":{"channel":"","styles":{"support":"","sales":"","short":"","formal":"","hype":""}},"lastMessageId":"m3","knowledgeSignature":"magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active","messageCount":3,"modelOverride":"","profileId":"draft_quality","providerRouteId":"mock","unreadCount":2,"updatedAt":"2 min ago"}, false, magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active, , [object Object], draft_quality, mock, [object Object]]
+Incoming: [[object Object], [object Object], {"channelId":"instagram-comments","conversationId":"conv-iris","guidance":{"channel":"","styles":{"support":"","sales":"","short":"","formal":"","hype":""}},"lastMessageId":"m3","knowledgeSignature":"magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active","messageCount":3,"modelOverride":"","profileId":"draft_quality","providerRouteId":"mock","unreadCount":2,"updatedAt":"2 min ago"}, false, magic-arm-kit:2026-04-10T00:00:00.000Z:active|single-rod-mount:2026-04-10T00:00:00.000Z:active|creator-bundle:2026-04-10T00:00:00.000Z:active|desk-clamp-fit:2026-04-10T00:00:00.000Z:active|shipping-sla:2026-04-10T00:00:00.000Z:active, [object Object],[object Object],[object Object],[object Object],[object Object], , [object Object], draft_quality, mock, [object Object]] 
+    at areHookInputsEqual (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4604:56)
+    at updateEffectImpl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:5300:50)
+    at Object.useEffect (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15568:13)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:1722:36)
+    at InboxWorkspace (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/src_01ch5la._.js?id=%255Bproject%255D%252Fsrc%252Fcomponents%252Finbox-workspace.tsx+%255Bapp-client%255D+%2528ecmascript%2529:223:180)
+    at Object.react_stack_bottom_frame (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15037:24)
+    at renderWithHooksAgain (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4675:24)
+    at renderWithHooks (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4626:28)
+    at updateFunctionComponent (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6081:21)
+    at beginWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6691:24)
+    at runWithFiberInDEV (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopSync (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9449:40)
+    at renderRootSync (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9433:13)
+    at performWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:186)
+    at performSyncWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10263:9)
+    at flushSyncWorkAcrossRoots_impl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10179:316)
+    at flushSyncWork$1 (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9230:86)
+    at Object.scheduleRefresh (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:299:13)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:391:33)
+    at Set.forEach (<anonymous>)
+    at Object.performReactRefresh (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:384:38)
+    at applyUpdate (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:878:31)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:886:13) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4604:56)

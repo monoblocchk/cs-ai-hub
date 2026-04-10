@@ -1,0 +1,106 @@
+{
+  "ai": {
+    "channelGuidanceByChannelId": {
+      "instagram-comments": "",
+      "instagram-dm": "",
+      "email": "",
+      "whatsapp": ""
+    },
+    "modelOverride": "",
+    "profileId": "draft_quality",
+    "providerRouteId": "mock",
+    "styleGuidance": {
+      "support": "",
+      "sales": "",
+      "short": "",
+      "formal": "",
+      "hype": ""
+    }
+  },
+  "knowledge": {
+    "cards": [
+      {
+        "id": "magic-arm-kit",
+        "title": "Magic Arm Kit",
+        "type": "Product",
+        "freshness": "Synced 2 hrs ago",
+        "source": "monoblocc.com/products/magic-arm-kit",
+        "body": "Best for flexible webcam, light, and accessory positioning. Uses a 1/4 inch mount and is built for quick angle changes without redoing the whole setup.",
+        "sourceType": "web",
+        "status": "active",
+        "updatedAt": "2026-04-10T00:00:00.000Z"
+      },
+      {
+        "id": "single-rod-mount",
+        "title": "Single Rod Mount",
+        "type": "Product",
+        "freshness": "Synced today",
+        "source": "monoblocc.com/products/single-rod-mount",
+        "body": "Cleaner footprint for compact desks and overhead shots. Easier choice when the customer wants a simple, fixed mounting path instead of a fully articulated arm.",
+        "sourceType": "web",
+        "status": "active",
+        "updatedAt": "2026-04-10T00:00:00.000Z"
+      },
+      {
+        "id": "desk-clamp-fit",
+        "title": "Desk Clamp Fit Guide",
+        "type": "Usage",
+        "freshness": "Manual note",
+        "source": "Internal usage notes",
+        "body": "Standard clamp fits most desks up to roughly 55 mm thickness. For thicker edges or lips, support should confirm desk profile before promising compatibility.",
+        "sourceType": "manual",
+        "status": "active",
+        "updatedAt": "2026-04-10T00:00:00.000Z"
+      },
+      {
+        "id": "shipping-sla",
+        "title": "Shipping and Dispatch",
+        "type": "Policy",
+        "freshness": "Synced yesterday",
+        "source": "monoblocc.com/shipping",
+        "body": "In-stock orders usually dispatch in 1 to 2 business days. Agents should avoid promising exact delivery dates when the courier handoff has not happened yet.",
+        "sourceType": "web",
+        "status": "active",
+        "updatedAt": "2026-04-10T00:00:00.000Z"
+      },
+      {
+        "id": "creator-bundle",
+        "title": "Creator Starter Bundle",
+        "type": "Product",
+        "freshness": "Manual note",
+        "source": "Internal merchandising notes",
+        "body": "Bundle positioning: camera stability first, cable cleanliness second, modular add-ons later. Strong angle for creators upgrading from improvised desk rigs.",
+        "sourceType": "manual",
+        "status": "active",
+        "updatedAt": "2026-04-10T00:00:00.000Z"
+      }
+    ],
+    "webSources": [
+      {
+        "id": "source-magic-arm-kit",
+        "label": "Magic Arm Kit product page",
+        "note": "Primary product source for flexible creator rig recommendations.",
+        "status": "active",
+        "updatedAt": "2026-04-10T00:00:00.000Z",
+        "url": "https://monoblocc.com/products/magic-arm-kit"
+      },
+      {
+        "id": "source-single-rod-mount",
+        "label": "Single Rod Mount product page",
+        "note": "Used when a cleaner fixed setup is the better answer.",
+        "status": "active",
+        "updatedAt": "2026-04-10T00:00:00.000Z",
+        "url": "https://monoblocc.com/products/single-rod-mount"
+      },
+      {
+        "id": "source-shipping",
+        "label": "Shipping policy page",
+        "note": "Grounding for dispatch and courier timing replies.",
+        "status": "active",
+        "updatedAt": "2026-04-10T00:00:00.000Z",
+        "url": "https://monoblocc.com/shipping"
+      }
+    ]
+  },
+  "updatedAt": "2026-04-10T00:00:00.000Z"
+}

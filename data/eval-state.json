@@ -1,0 +1,25 @@
+{
+  "experiments": [
+    {
+      "additionalGuidance": "Bias toward direct answers and a lighter-touch public response.",
+      "enabled": true,
+      "id": "exp-fast-direct",
+      "label": "Fast direct",
+      "modelOverride": "",
+      "profileId": "draft_fast",
+      "providerRouteId": "mock"
+    },
+    {
+      "additionalGuidance": "Keep the answer polished and add one useful value angle if it fits naturally.",
+      "enabled": true,
+      "id": "exp-quality-sales",
+      "label": "Quality sales nudge",
+      "modelOverride": "",
+      "profileId": "draft_quality",
+      "providerRouteId": "mock"
+    }
+  ],
+  "runs": [],
+  "selectedConversationId": "conv-iris",
+  "updatedAt": "2026-04-10T04:29:57.556Z"
+}

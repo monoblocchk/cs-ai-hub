@@ -1,7 +1,8 @@
 "use client";
 
 import { useDeferredValue, useEffect, useRef, useState } from "react";
-import { AiSettingsModal } from "@/components/ai-settings-modal";
+import { AdminWorkspace } from "@/components/admin-workspace";
+import { EvaluationWorkspace } from "@/components/evaluation-workspace";
 import {
   DRAFT_STYLE_LABELS,
   DRAFT_STYLE_ORDER,
@@ -17,23 +18,20 @@ import type {
   ProviderConnectionStatus,
   ProviderRouteId,
 } from "@/lib/ai/types";
+import type {
+  AdminState,
+  ManagedKnowledgeCard,
+  ManagedWebSource,
+} from "@/lib/admin/types";
+import type { EvalExperiment, EvalRunResult, EvalState } from "@/lib/evals/types";
 import {
   channels,
   conversations,
   knowledgeCards,
   type Conversation,
+  type KnowledgeCard,
   type Message,
 } from "@/lib/mock-data";
-
-const AI_SETTINGS_STORAGE_KEY = "monoblocc-ai-draft-settings-v1";
-
-type PersistedAiSettings = {
-  channelGuidanceByChannelId: Record<string, string>;
-  modelOverride: string;
-  profileId: ModelProfileId;
-  providerRouteId: ProviderRouteId;
-  styleGuidance: Record<DraftStyle, string>;
-};
 
 function createEmptyStyleGuidance(): Record<DraftStyle, string> {
   return {
@@ -45,13 +43,30 @@ function createEmptyStyleGuidance(): Record<DraftStyle, string> {
   };
 }
 
-function createDefaultSettings(): PersistedAiSettings {
+function createFallbackKnowledgeCards(): ManagedKnowledgeCard[] {
+  const now = new Date().toISOString();
+
+  return knowledgeCards.map((card) => ({
+    ...card,
+    sourceType:
+      card.source.startsWith("http") || card.source.includes(".com/")
+        ? "web"
+        : "manual",
+    status: "active",
+    updatedAt: now,
+  }));
+}
+
+function createFallbackPrimaryWebSource(): ManagedWebSource {
+  const now = new Date().toISOString();
+
   return {
-    channelGuidanceByChannelId: {},
-    modelOverride: "",
-    profileId: "draft_quality",
-    providerRouteId: "mock",
-    styleGuidance: createEmptyStyleGuidance(),
+    id: "source-magic-arm-kit",
+    label: "Magic Arm Kit product page",
+    note: "Primary product source for flexible creator rig recommendations.",
+    status: "active",
+    updatedAt: now,
+    url: "https://monoblocc.com/products/magic-arm-kit",
   };
 }
 
@@ -97,6 +112,7 @@ function buildLocalDraftChoices(conversation: Conversation): DraftCandidate[] {
 
 function buildDraftCacheKey(
   conversation: Conversation,
+  knowledgeSignature: string,
   profileId: ModelProfileId,
   providerRouteId: ProviderRouteId,
   modelOverride: string,
@@ -107,6 +123,7 @@ function buildDraftCacheKey(
     conversationId: conversation.id,
     guidance,
     lastMessageId: conversation.messages[conversation.messages.length - 1]?.id ?? "",
+    knowledgeSignature,
     messageCount: conversation.messages.length,
     modelOverride: modelOverride.trim(),
     profileId,
@@ -129,45 +146,128 @@ function mergeDraftChoices(
   return currentDrafts.map((draft) => nextMap.get(draft.key) ?? draft);
 }
 
-function normalisePersistedSettings(raw: string | null): PersistedAiSettings {
-  const defaults = createDefaultSettings();
-
-  if (!raw) {
-    return defaults;
-  }
-
-  try {
-    const parsed = JSON.parse(raw) as Partial<PersistedAiSettings>;
-    const providerRouteId =
-      parsed.providerRouteId && parsed.providerRouteId in PROVIDER_ROUTES
-        ? parsed.providerRouteId
-        : defaults.providerRouteId;
-    const profileId =
-      parsed.profileId && parsed.profileId in MODEL_PROFILES
-        ? parsed.profileId
-        : defaults.profileId;
-
-    return {
-      channelGuidanceByChannelId:
-        parsed.channelGuidanceByChannelId &&
-        typeof parsed.channelGuidanceByChannelId === "object"
-          ? parsed.channelGuidanceByChannelId
-          : defaults.channelGuidanceByChannelId,
-      modelOverride:
-        typeof parsed.modelOverride === "string"
-          ? parsed.modelOverride
-          : defaults.modelOverride,
-      profileId,
-      providerRouteId,
-      styleGuidance: {
-        ...defaults.styleGuidance,
-        ...(parsed.styleGuidance ?? {}),
-      },
-    };
-  } catch {
-    return defaults;
-  }
+function createFallbackAdminState(): AdminState {
+  return {
+    ai: {
+      channelGuidanceByChannelId: Object.fromEntries(
+        channels.map((channel) => [channel.id, ""]),
+      ),
+      modelOverride: "",
+      profileId: "draft_quality",
+      providerRouteId: "mock",
+      styleGuidance: createEmptyStyleGuidance(),
+    },
+    knowledge: {
+      cards: createFallbackKnowledgeCards(),
+      webSources: [
+        createFallbackPrimaryWebSource(),
+        {
+          id: "source-single-rod-mount",
+          label: "Single Rod Mount product page",
+          note: "Used when a cleaner fixed setup is the better answer.",
+          status: "active",
+          updatedAt: new Date().toISOString(),
+          url: "https://monoblocc.com/products/single-rod-mount",
+        },
+        {
+          id: "source-shipping",
+          label: "Shipping policy page",
+          note: "Grounding for dispatch and courier timing replies.",
+          status: "active",
+          updatedAt: new Date().toISOString(),
+          url: "https://monoblocc.com/shipping",
+        },
+      ],
+    },
+    updatedAt: new Date().toISOString(),
+  };
 }
+
+function serializeAdminState(state: AdminState) {
+  return JSON.stringify(state);
+}
+
+function getKnowledgeForConversation(
+  conversation: Conversation,
+  managedCards: ManagedKnowledgeCard[],
+) {
+  const activeCards = managedCards.filter((card) => card.status === "active");
+  const referencedIds = new Set(conversation.knowledgeIds);
+  const prioritized = activeCards.filter((card) => referencedIds.has(card.id));
+  const supplemental = activeCards.filter((card) => !referencedIds.has(card.id));
+
+  return [...prioritized, ...supplemental];
+}
+
+function toPromptKnowledgeCards(cards: ManagedKnowledgeCard[]): KnowledgeCard[] {
+  return cards.map((card) => ({
+    body: card.body,
+    freshness: card.freshness,
+    id: card.id,
+    source: card.source,
+    title: card.title,
+    type: card.type,
+  }));
+}
+
+function getDraftKnowledgeCards(
+  conversation: Conversation,
+  managedCards: ManagedKnowledgeCard[],
+) {
+  return toPromptKnowledgeCards(
+    getKnowledgeForConversation(conversation, managedCards).slice(0, 6),
+  );
+}
+
+const FALLBACK_ADMIN_STATE = createFallbackAdminState();
+
+function createFallbackEvalState(): EvalState {
+  return {
+    experiments: [
+      {
+        additionalGuidance:
+          "Bias toward directness and a lighter-touch public reply.",
+        enabled: true,
+        id: "exp-fast-direct",
+        label: "Fast direct",
+        modelOverride: "",
+        profileId: "draft_fast",
+        providerRouteId: "mock",
+      },
+      {
+        additionalGuidance:
+          "Answer the question clearly, then add one natural value angle if it fits.",
+        enabled: true,
+        id: "exp-quality-sales",
+        label: "Quality sales nudge",
+        modelOverride: "",
+        profileId: "draft_quality",
+        providerRouteId: "mock",
+      },
+    ],
+    runs: [],
+    selectedConversationId: conversations[0]?.id ?? "",
+    updatedAt: new Date().toISOString(),
+  };
+}
+
+function serializeEvalState(state: EvalState) {
+  return JSON.stringify(state);
+}
+
+function createBaselineExperiment(adminState: AdminState): EvalExperiment {
+  return {
+    additionalGuidance: "",
+    enabled: true,
+    id: "baseline-admin",
+    label: "Current admin baseline",
+    modelOverride: adminState.ai.modelOverride,
+    profileId: adminState.ai.profileId,
+    providerRouteId: adminState.ai.providerRouteId,
+  };
+}
+
+const FALLBACK_EVAL_STATE = createFallbackEvalState();
 
 export function InboxWorkspace() {
   const [conversationData, setConversationData] = useState(conversations);
@@ -177,15 +277,13 @@ export function InboxWorkspace() {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [editorText, setEditorText] = useState("");
-  const [selectedProfileId, setSelectedProfileId] =
-    useState<ModelProfileId>("draft_quality");
-  const [selectedProviderRouteId, setSelectedProviderRouteId] =
-    useState<ProviderRouteId>("mock");
-  const [modelOverride, setModelOverride] = useState("");
-  const [styleGuidance, setStyleGuidance] = useState(createEmptyStyleGuidance);
-  const [channelGuidanceByChannelId, setChannelGuidanceByChannelId] = useState<
-    Record<string, string>
-  >({});
+  const [viewMode, setViewMode] = useState<"inbox" | "admin" | "evals">(
+    "inbox",
+  );
+  const [adminState, setAdminState] = useState<AdminState>(
+    FALLBACK_ADMIN_STATE,
+  );
+  const [evalState, setEvalState] = useState<EvalState>(FALLBACK_EVAL_STATE);
   const [draftCache, setDraftCache] = useState<
     Record<string, DraftGenerationResponse>
   >({});
@@ -194,66 +292,42 @@ export function InboxWorkspace() {
     string[]
   >([]);
   const [generationError, setGenerationError] = useState<string | null>(null);
-  const [settingsHydrated, setSettingsHydrated] = useState(false);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [modalProfileId, setModalProfileId] =
-    useState<ModelProfileId>("draft_quality");
-  const [modalRouteId, setModalRouteId] = useState<ProviderRouteId>("mock");
-  const [modalModelOverride, setModalModelOverride] = useState("");
-  const [modalGuidance, setModalGuidance] = useState<GuidanceOverrides>({
-    channel: "",
-    styles: createEmptyStyleGuidance(),
-  });
   const [providerStatuses, setProviderStatuses] = useState<
     ProviderConnectionStatus[]
   >([]);
   const [credentialMessage, setCredentialMessage] = useState<string | null>(
     null,
   );
+  const [adminSaveMessage, setAdminSaveMessage] = useState<string | null>(null);
+  const [evalSaveMessage, setEvalSaveMessage] = useState<string | null>(null);
+  const [isLoadingAdminState, setIsLoadingAdminState] = useState(true);
+  const [isLoadingEvalState, setIsLoadingEvalState] = useState(true);
+  const [isSavingAdminState, setIsSavingAdminState] = useState(false);
+  const [isSavingEvalState, setIsSavingEvalState] = useState(false);
+  const [isRunningEvaluations, setIsRunningEvaluations] = useState(false);
   const [isSavingCredential, setIsSavingCredential] = useState(false);
+  const [savedAdminSnapshot, setSavedAdminSnapshot] = useState(() =>
+    serializeAdminState(FALLBACK_ADMIN_STATE),
+  );
+  const [savedEvalSnapshot, setSavedEvalSnapshot] = useState(() =>
+    serializeEvalState(FALLBACK_EVAL_STATE),
+  );
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const inFlightDraftKeysRef = useRef(new Set<string>());
+  const selectedProfileId = adminState.ai.profileId;
+  const selectedProviderRouteId = adminState.ai.providerRouteId;
+  const modelOverride = adminState.ai.modelOverride;
+  const styleGuidance = adminState.ai.styleGuidance;
+  const channelGuidanceByChannelId = adminState.ai.channelGuidanceByChannelId;
+  const managedKnowledgeCards = adminState.knowledge.cards;
+  const managedWebSources = adminState.knowledge.webSources;
 
   useEffect(() => {
-    const persisted = normalisePersistedSettings(
-      window.localStorage.getItem(AI_SETTINGS_STORAGE_KEY),
-    );
-
-    setSelectedProfileId(persisted.profileId);
-    setSelectedProviderRouteId(persisted.providerRouteId);
-    setModelOverride(persisted.modelOverride);
-    setStyleGuidance(persisted.styleGuidance);
-    setChannelGuidanceByChannelId(persisted.channelGuidanceByChannelId);
-    setSettingsHydrated(true);
+    void loadAdminState();
+    void loadEvalState();
     void refreshProviderStatuses();
   }, []);
-
-  useEffect(() => {
-    if (!settingsHydrated) {
-      return;
-    }
-
-    const persisted: PersistedAiSettings = {
-      channelGuidanceByChannelId,
-      modelOverride,
-      profileId: selectedProfileId,
-      providerRouteId: selectedProviderRouteId,
-      styleGuidance,
-    };
-
-    window.localStorage.setItem(
-      AI_SETTINGS_STORAGE_KEY,
-      JSON.stringify(persisted),
-    );
-  }, [
-    channelGuidanceByChannelId,
-    modelOverride,
-    selectedProfileId,
-    selectedProviderRouteId,
-    settingsHydrated,
-    styleGuidance,
-  ]);
 
   const activeChannel =
     channels.find((channel) => channel.id === selectedChannelId) ?? channels[0];
@@ -278,10 +352,13 @@ export function InboxWorkspace() {
       (channel) => channel.id === selectedConversation?.channelId,
     ) ?? activeChannel;
   const relatedKnowledge = selectedConversation
-    ? knowledgeCards.filter((card) =>
-        selectedConversation.knowledgeIds.includes(card.id),
-      )
+    ? getKnowledgeForConversation(selectedConversation, managedKnowledgeCards)
     : [];
+  const sidebarKnowledge = relatedKnowledge.slice(0, 5);
+  const knowledgeSignature = relatedKnowledge
+    .slice(0, 6)
+    .map((card) => `${card.id}:${card.updatedAt}:${card.status}`)
+    .join("|");
   const activeGuidance: GuidanceOverrides = {
     channel:
       channelGuidanceByChannelId[selectedConversationChannel.id] ?? "",
@@ -290,6 +367,7 @@ export function InboxWorkspace() {
   const currentDraftKey = selectedConversation
     ? buildDraftCacheKey(
         selectedConversation,
+        knowledgeSignature,
         selectedProfileId,
         selectedProviderRouteId,
         modelOverride,
@@ -308,10 +386,26 @@ export function InboxWorkspace() {
   const currentModelLabel =
     modelOverride.trim() || currentProvider.defaultModels[selectedProfileId];
   const isGeneratingCurrentDrafts = loadingDraftKey === currentDraftKey;
+  const currentAdminSnapshot = serializeAdminState(adminState);
+  const isAdminDirty = currentAdminSnapshot !== savedAdminSnapshot;
+  const currentEvalSnapshot = serializeEvalState(evalState);
+  const isEvalDirty = currentEvalSnapshot !== savedEvalSnapshot;
+  const currentProviderStatus = providerStatuses.find(
+    (status) => status.id === selectedProviderRouteId,
+  );
+  const baselineExperiment = createBaselineExperiment(adminState);
+  const providerIndicator =
+    selectedProviderRouteId === "mock"
+      ? "mock"
+      : currentProviderStatus?.activeInRuntime
+        ? "live"
+        : currentProviderStatus?.savedToEnvFile
+          ? "restart"
+          : "setup";
 
   useEffect(() => {
     if (
-      !settingsHydrated ||
+      isLoadingAdminState ||
       !selectedConversation ||
       !currentDraftKey ||
       selectedConversation.unreadCount === 0 ||
@@ -327,8 +421,9 @@ export function InboxWorkspace() {
         channelGuidanceByChannelId[selectedConversation.channelId] ?? "",
       styles: styleGuidance,
     };
-    const currentKnowledgeCards = knowledgeCards.filter((card) =>
-      selectedConversation.knowledgeIds.includes(card.id),
+    const currentKnowledgeCards = getDraftKnowledgeCards(
+      selectedConversation,
+      managedKnowledgeCards,
     );
     const currentChannel =
       channels.find((channel) => channel.id === selectedConversation.channelId) ??
@@ -408,13 +503,67 @@ export function InboxWorkspace() {
     cachedDraftResponse,
     channelGuidanceByChannelId,
     currentDraftKey,
+    isLoadingAdminState,
+    knowledgeSignature,
+    managedKnowledgeCards,
     modelOverride,
     selectedConversation,
     selectedProfileId,
     selectedProviderRouteId,
-    settingsHydrated,
     styleGuidance,
   ]);
+
+  async function loadAdminState() {
+    setIsLoadingAdminState(true);
+
+    try {
+      const response = await fetch("/api/admin/state");
+
+      if (!response.ok) {
+        throw new Error("Unable to load saved admin state.");
+      }
+
+      const payload = (await response.json()) as AdminState;
+
+      setAdminState(payload);
+      setSavedAdminSnapshot(serializeAdminState(payload));
+      setAdminSaveMessage(null);
+    } catch (error) {
+      setAdminSaveMessage(
+        error instanceof Error
+          ? `${error.message} Using the local fallback state for now.`
+          : "Unable to load saved admin state. Using the local fallback state for now.",
+      );
+    } finally {
+      setIsLoadingAdminState(false);
+    }
+  }
+
+  async function loadEvalState() {
+    setIsLoadingEvalState(true);
+
+    try {
+      const response = await fetch("/api/evals/state");
+
+      if (!response.ok) {
+        throw new Error("Unable to load saved evaluation state.");
+      }
+
+      const payload = (await response.json()) as EvalState;
+
+      setEvalState(payload);
+      setSavedEvalSnapshot(serializeEvalState(payload));
+      setEvalSaveMessage(null);
+    } catch (error) {
+      setEvalSaveMessage(
+        error instanceof Error
+          ? `${error.message} Using the local fallback evaluation state for now.`
+          : "Unable to load saved evaluation state. Using the local fallback evaluation state for now.",
+      );
+    } finally {
+      setIsLoadingEvalState(false);
+    }
+  }
 
   async function refreshProviderStatuses() {
     try {
@@ -430,7 +579,7 @@ export function InboxWorkspace() {
       };
 
       setProviderStatuses(payload.providers ?? []);
-      setCredentialMessage(payload.restartHint ?? null);
+      setCredentialMessage(null);
     } catch (error) {
       setCredentialMessage(
         error instanceof Error
@@ -507,33 +656,6 @@ export function InboxWorkspace() {
     setGenerationError(null);
   }
 
-  function handleOpenSettings() {
-    setCredentialMessage(null);
-    setModalProfileId(selectedProfileId);
-    setModalRouteId(selectedProviderRouteId);
-    setModalModelOverride(modelOverride);
-    setModalGuidance({
-      channel:
-        channelGuidanceByChannelId[selectedConversationChannel.id] ?? "",
-      styles: { ...styleGuidance },
-    });
-    setIsSettingsOpen(true);
-    void refreshProviderStatuses();
-  }
-
-  function handleSaveSettings() {
-    setSelectedProfileId(modalProfileId);
-    setSelectedProviderRouteId(modalRouteId);
-    setModelOverride(modalModelOverride);
-    setStyleGuidance({ ...modalGuidance.styles });
-    setChannelGuidanceByChannelId((current) => ({
-      ...current,
-      [selectedConversationChannel.id]: modalGuidance.channel,
-    }));
-    setIsSettingsOpen(false);
-    setGenerationError(null);
-  }
-
   async function handleRegenerateDraftStyle(style: DraftStyle) {
     if (!selectedConversation || !currentDraftKey) {
       return;
@@ -550,8 +672,9 @@ export function InboxWorkspace() {
         channelGuidanceByChannelId[selectedConversation.channelId] ?? "",
       styles: styleGuidance,
     };
-    const currentKnowledgeCards = knowledgeCards.filter((card) =>
-      selectedConversation.knowledgeIds.includes(card.id),
+    const currentKnowledgeCards = getDraftKnowledgeCards(
+      selectedConversation,
+      managedKnowledgeCards,
     );
     const currentChannel =
       channels.find((channel) => channel.id === selectedConversation.channelId) ??
@@ -662,6 +785,450 @@ export function InboxWorkspace() {
     }
   }
 
+  async function handleSaveAdminState() {
+    if (!isAdminDirty) {
+      return;
+    }
+
+    setIsSavingAdminState(true);
+    setAdminSaveMessage(null);
+
+    try {
+      const response = await fetch("/api/admin/state", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(adminState),
+      });
+
+      const payload = (await response.json()) as AdminState | { error?: string };
+
+      if (!response.ok || "error" in payload) {
+        throw new Error(
+          "error" in payload && payload.error
+            ? payload.error
+            : "Unable to save admin state.",
+        );
+      }
+
+      const nextState = payload as AdminState;
+
+      setAdminState(nextState);
+      setSavedAdminSnapshot(serializeAdminState(nextState));
+      setDraftCache({});
+      setAdminSaveMessage("Admin state saved successfully.");
+    } catch (error) {
+      setAdminSaveMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to save admin state.",
+      );
+    } finally {
+      setIsSavingAdminState(false);
+    }
+  }
+
+  function handleProviderRouteChange(value: ProviderRouteId) {
+    setAdminState((current) => ({
+      ...current,
+      ai: {
+        ...current.ai,
+        providerRouteId: value,
+      },
+    }));
+    setAdminSaveMessage(null);
+    setGenerationError(null);
+  }
+
+  function handleProfileChange(value: ModelProfileId) {
+    setAdminState((current) => ({
+      ...current,
+      ai: {
+        ...current.ai,
+        profileId: value,
+      },
+    }));
+    setAdminSaveMessage(null);
+    setGenerationError(null);
+  }
+
+  function handleModelOverrideChange(value: string) {
+    setAdminState((current) => ({
+      ...current,
+      ai: {
+        ...current.ai,
+        modelOverride: value,
+      },
+    }));
+    setAdminSaveMessage(null);
+    setGenerationError(null);
+  }
+
+  function handleChannelGuidanceChange(channelId: string, value: string) {
+    setAdminState((current) => ({
+      ...current,
+      ai: {
+        ...current.ai,
+        channelGuidanceByChannelId: {
+          ...current.ai.channelGuidanceByChannelId,
+          [channelId]: value,
+        },
+      },
+    }));
+    setAdminSaveMessage(null);
+    setGenerationError(null);
+  }
+
+  function handleStyleGuidanceChange(style: DraftStyle, value: string) {
+    setAdminState((current) => ({
+      ...current,
+      ai: {
+        ...current.ai,
+        styleGuidance: {
+          ...current.ai.styleGuidance,
+          [style]: value,
+        },
+      },
+    }));
+    setAdminSaveMessage(null);
+    setGenerationError(null);
+  }
+
+  function handleAddKnowledgeCard() {
+    const timestamp = new Date().toISOString();
+
+    setAdminState((current) => ({
+      ...current,
+      knowledge: {
+        ...current.knowledge,
+        cards: [
+          ...current.knowledge.cards,
+          {
+            body: "",
+            freshness: "Manual note",
+            id: `knowledge-${Date.now()}`,
+            source: "",
+            sourceType: "manual",
+            status: "draft",
+            title: "New knowledge card",
+            type: "Product",
+            updatedAt: timestamp,
+          },
+        ],
+      },
+    }));
+    setAdminSaveMessage(null);
+  }
+
+  function handleKnowledgeCardChange(
+    knowledgeId: string,
+    patch: Partial<ManagedKnowledgeCard>,
+  ) {
+    const timestamp = new Date().toISOString();
+
+    setAdminState((current) => ({
+      ...current,
+      knowledge: {
+        ...current.knowledge,
+        cards: current.knowledge.cards.map((card) =>
+          card.id === knowledgeId
+            ? {
+                ...card,
+                ...patch,
+                updatedAt: timestamp,
+              }
+            : card,
+        ),
+      },
+    }));
+    setAdminSaveMessage(null);
+  }
+
+  function handleDeleteKnowledgeCard(knowledgeId: string) {
+    setAdminState((current) => ({
+      ...current,
+      knowledge: {
+        ...current.knowledge,
+        cards: current.knowledge.cards.filter((card) => card.id !== knowledgeId),
+      },
+    }));
+    setAdminSaveMessage(null);
+  }
+
+  function handleAddWebSource() {
+    const timestamp = new Date().toISOString();
+
+    setAdminState((current) => ({
+      ...current,
+      knowledge: {
+        ...current.knowledge,
+        webSources: [
+          ...current.knowledge.webSources,
+          {
+            id: `source-${Date.now()}`,
+            label: "New web source",
+            note: "",
+            status: "active",
+            updatedAt: timestamp,
+            url: "",
+          },
+        ],
+      },
+    }));
+    setAdminSaveMessage(null);
+  }
+
+  function handleWebSourceChange(
+    sourceId: string,
+    patch: Partial<ManagedWebSource>,
+  ) {
+    const timestamp = new Date().toISOString();
+
+    setAdminState((current) => ({
+      ...current,
+      knowledge: {
+        ...current.knowledge,
+        webSources: current.knowledge.webSources.map((source) =>
+          source.id === sourceId
+            ? {
+                ...source,
+                ...patch,
+                updatedAt: timestamp,
+              }
+            : source,
+        ),
+      },
+    }));
+    setAdminSaveMessage(null);
+  }
+
+  function handleDeleteWebSource(sourceId: string) {
+    setAdminState((current) => ({
+      ...current,
+      knowledge: {
+        ...current.knowledge,
+        webSources: current.knowledge.webSources.filter(
+          (source) => source.id !== sourceId,
+        ),
+      },
+    }));
+    setAdminSaveMessage(null);
+  }
+
+  async function handleSaveEvalState(nextState?: EvalState) {
+    const targetState = nextState ?? evalState;
+
+    if (!nextState && !isEvalDirty) {
+      return true;
+    }
+
+    setIsSavingEvalState(true);
+    setEvalSaveMessage(null);
+
+    try {
+      const response = await fetch("/api/evals/state", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(targetState),
+      });
+
+      const payload = (await response.json()) as EvalState | { error?: string };
+
+      if (!response.ok || "error" in payload) {
+        throw new Error(
+          "error" in payload && payload.error
+            ? payload.error
+            : "Unable to save evaluation state.",
+        );
+      }
+
+      const persistedState = payload as EvalState;
+      setEvalState(persistedState);
+      setSavedEvalSnapshot(serializeEvalState(persistedState));
+      setEvalSaveMessage("Evaluation state saved successfully.");
+      return true;
+    } catch (error) {
+      setEvalSaveMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to save evaluation state.",
+      );
+      return false;
+    } finally {
+      setIsSavingEvalState(false);
+    }
+  }
+
+  function handleSelectEvalConversation(conversationId: string) {
+    setEvalState((current) => ({
+      ...current,
+      selectedConversationId: conversationId,
+    }));
+
+    const conversation =
+      conversationData.find((entry) => entry.id === conversationId) ??
+      conversations.find((entry) => entry.id === conversationId);
+
+    if (conversation) {
+      setSelectedChannelId(conversation.channelId);
+      setSelectedConversationId(conversation.id);
+    }
+
+    setEvalSaveMessage(null);
+  }
+
+  function handleAddEvalExperiment() {
+    setEvalState((current) => ({
+      ...current,
+      experiments: [
+        ...current.experiments,
+        {
+          additionalGuidance: "",
+          enabled: true,
+          id: `exp-${Date.now()}`,
+          label: "New experiment",
+          modelOverride: "",
+          profileId: "draft_quality",
+          providerRouteId: "mock",
+        },
+      ],
+    }));
+    setEvalSaveMessage(null);
+  }
+
+  function handleEvalExperimentChange(
+    experimentId: string,
+    patch: Partial<EvalExperiment>,
+  ) {
+    setEvalState((current) => ({
+      ...current,
+      experiments: current.experiments.map((experiment) =>
+        experiment.id === experimentId
+          ? {
+              ...experiment,
+              ...patch,
+            }
+          : experiment,
+      ),
+    }));
+    setEvalSaveMessage(null);
+  }
+
+  function handleDeleteEvalExperiment(experimentId: string) {
+    setEvalState((current) => ({
+      ...current,
+      experiments: current.experiments.filter(
+        (experiment) => experiment.id !== experimentId,
+      ),
+    }));
+    setEvalSaveMessage(null);
+  }
+
+  function handleEvalResultChange(
+    runId: string,
+    resultId: string,
+    patch: Partial<Pick<EvalRunResult, "notes" | "score" | "winner">>,
+  ) {
+    setEvalState((current) => ({
+      ...current,
+      runs: current.runs.map((run) =>
+        run.id === runId
+          ? {
+              ...run,
+              results: run.results.map((result) =>
+                result.experimentId === resultId
+                  ? {
+                      ...result,
+                      ...patch,
+                    }
+                  : result,
+              ),
+            }
+          : run,
+      ),
+    }));
+    setEvalSaveMessage(null);
+  }
+
+  function handleSetEvalWinner(runId: string, resultId: string) {
+    setEvalState((current) => ({
+      ...current,
+      runs: current.runs.map((run) =>
+        run.id === runId
+          ? {
+              ...run,
+              results: run.results.map((result) => ({
+                ...result,
+                winner: result.experimentId === resultId,
+              })),
+            }
+          : run,
+      ),
+    }));
+    setEvalSaveMessage(null);
+  }
+
+  async function handleRunEvaluations() {
+    const selectedEvalConversationId =
+      evalState.selectedConversationId || conversations[0]?.id;
+
+    if (!selectedEvalConversationId) {
+      return;
+    }
+
+    setIsRunningEvaluations(true);
+    setEvalSaveMessage(null);
+
+    try {
+      const response = await fetch("/api/evals/run", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          adminState,
+          conversationId: selectedEvalConversationId,
+          experiments: [baselineExperiment, ...evalState.experiments],
+        }),
+      });
+
+      const payload = (await response.json()) as
+        | { error?: string }
+        | { id: string; results: EvalState["runs"][number]["results"] };
+
+      if (!response.ok || "error" in payload) {
+        throw new Error(
+          "error" in payload && payload.error
+            ? payload.error
+            : "Unable to run evaluation experiments.",
+        );
+      }
+
+      const run = payload as EvalState["runs"][number];
+      const nextState: EvalState = {
+        ...evalState,
+        runs: [run, ...evalState.runs].slice(0, 12),
+      };
+
+      const saved = await handleSaveEvalState(nextState);
+
+      if (saved) {
+        setEvalSaveMessage("Evaluation run completed and saved.");
+      }
+    } catch (error) {
+      setEvalSaveMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to run evaluation experiments.",
+      );
+    } finally {
+      setIsRunningEvaluations(false);
+    }
+  }
+
   const channelCounts = channels.map((channel) => ({
     id: channel.id,
     openCount: conversationData.filter(
@@ -730,24 +1297,131 @@ export function InboxWorkspace() {
             <div className="px-2 pb-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/45">
               Settings
             </div>
-            <button
-              type="button"
-              onClick={handleOpenSettings}
-              className="flex w-full items-center justify-between rounded-[10px] border border-transparent px-3 py-3 text-left text-white/72 transition hover:bg-white/6 hover:text-white"
-            >
-              <div>
-                <div className="text-[13px] font-medium">AI setup</div>
-                <div className="mt-1 text-[12px] text-white/45">
-                  Providers, models, guidance
+            <div className="space-y-1.5">
+              <button
+                type="button"
+                onClick={() => {
+                  setViewMode("admin");
+                  setCredentialMessage(null);
+                  void refreshProviderStatuses();
+                }}
+                className={`flex w-full items-center justify-between rounded-[10px] border px-3 py-3 text-left transition ${
+                  viewMode === "admin"
+                    ? "border-transparent bg-white/10 text-white"
+                    : "border-transparent text-white/72 hover:bg-white/6 hover:text-white"
+                }`}
+              >
+                <div>
+                  <div className="text-[13px] font-medium">AI setup</div>
+                  <div className="mt-1 text-[12px] text-white/45">
+                    Providers, prompts, knowledge
+                  </div>
                 </div>
-              </div>
-              <div className="mono rounded-full bg-white/8 px-2 py-1 text-[11px] text-white/72">
-                {selectedProviderRouteId === "mock" ? "mock" : "live"}
-              </div>
-            </button>
+                <div
+                  className={`mono rounded-full px-2 py-1 text-[11px] ${
+                    providerIndicator === "live"
+                      ? "bg-[#22c55e] text-white"
+                      : providerIndicator === "restart"
+                        ? "bg-[#f59e0b] text-white"
+                        : providerIndicator === "setup"
+                          ? "bg-[#fb7185] text-white"
+                          : "bg-white/8 text-white/72"
+                  }`}
+                >
+                  {providerIndicator}
+                </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setViewMode("evals")}
+                className={`flex w-full items-center justify-between rounded-[10px] border px-3 py-3 text-left transition ${
+                  viewMode === "evals"
+                    ? "border-transparent bg-white/10 text-white"
+                    : "border-transparent text-white/72 hover:bg-white/6 hover:text-white"
+                }`}
+              >
+                <div>
+                  <div className="text-[13px] font-medium">Evaluations</div>
+                  <div className="mt-1 text-[12px] text-white/45">
+                    Compare model and prompt variants
+                  </div>
+                </div>
+                <div className="mono rounded-full bg-white/8 px-2 py-1 text-[11px] text-white/72">
+                  {evalState.runs.length}
+                </div>
+              </button>
+            </div>
           </div>
         </aside>
 
+          {viewMode === "admin" ? (
+            isLoadingAdminState ? (
+              <section className="flex min-h-[calc(100vh-1.5rem)] items-center justify-center lg:col-span-2 xl:col-span-3">
+                <div className="rounded-[18px] border border-[var(--border)] bg-[var(--white)] px-6 py-5 text-[13px] text-[var(--text-soft)] shadow-[0_16px_40px_rgba(17,24,39,0.06)]">
+                  Loading admin workspace...
+                </div>
+              </section>
+            ) : (
+              <AdminWorkspace
+                adminSaveMessage={adminSaveMessage}
+                channels={channels}
+                credentialMessage={credentialMessage}
+                isAdminDirty={isAdminDirty}
+                isSavingAdminState={isSavingAdminState}
+                isSavingCredential={isSavingCredential}
+                knowledgeCards={managedKnowledgeCards}
+                onAddKnowledgeCard={handleAddKnowledgeCard}
+                onAddWebSource={handleAddWebSource}
+                onBackToInbox={() => setViewMode("inbox")}
+                onChannelGuidanceChange={handleChannelGuidanceChange}
+                onDeleteKnowledgeCard={handleDeleteKnowledgeCard}
+                onDeleteWebSource={handleDeleteWebSource}
+                onKnowledgeCardChange={handleKnowledgeCardChange}
+                onModelOverrideChange={handleModelOverrideChange}
+                onProfileChange={handleProfileChange}
+                onProviderRouteChange={handleProviderRouteChange}
+                onSaveAdminState={handleSaveAdminState}
+                onSaveProviderKey={handleSaveProviderKey}
+                onStyleGuidanceChange={handleStyleGuidanceChange}
+                onWebSourceChange={handleWebSourceChange}
+                providerStatuses={providerStatuses}
+                state={adminState}
+                webSources={managedWebSources}
+              />
+            )
+          ) : viewMode === "evals" ? (
+            isLoadingEvalState ? (
+              <section className="flex min-h-[calc(100vh-1.5rem)] items-center justify-center lg:col-span-2 xl:col-span-3">
+                <div className="rounded-[18px] border border-[var(--border)] bg-[var(--white)] px-6 py-5 text-[13px] text-[var(--text-soft)] shadow-[0_16px_40px_rgba(17,24,39,0.06)]">
+                  Loading evaluation workspace...
+                </div>
+              </section>
+            ) : (
+              <EvaluationWorkspace
+                adminState={adminState}
+                baselineExperiment={baselineExperiment}
+                channels={channels}
+                conversations={conversationData}
+                evalSaveMessage={evalSaveMessage}
+                isEvalDirty={isEvalDirty}
+                isRunningEvaluations={isRunningEvaluations}
+                isSavingEvalState={isSavingEvalState}
+                onAddExperiment={handleAddEvalExperiment}
+                onBackToInbox={() => setViewMode("inbox")}
+                onDeleteExperiment={handleDeleteEvalExperiment}
+                onExperimentChange={handleEvalExperimentChange}
+                onResultChange={handleEvalResultChange}
+                onRunEvaluations={handleRunEvaluations}
+                onSaveEvalState={() => void handleSaveEvalState()}
+                onSelectConversation={handleSelectEvalConversation}
+                onSetWinner={handleSetEvalWinner}
+                providerStatuses={providerStatuses}
+                state={evalState}
+              />
+            )
+          ) : (
+            <>
           <section className="flex min-h-0 flex-col border-r border-[var(--border)] bg-[var(--white)]">
             <div className="border-b border-[var(--border)] px-4 py-4">
               <label className="block">
@@ -979,57 +1653,41 @@ export function InboxWorkspace() {
                 </div>
 
                 <div className="scroll-subtle min-h-0 flex-1 overflow-y-auto px-4 py-4">
-                  <div className="space-y-3">
-                    {relatedKnowledge.map((card) => (
-                      <article
-                        key={card.id}
-                        className="rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 py-3"
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="text-[13px] font-semibold">
-                            {card.title}
+                  {sidebarKnowledge.length > 0 ? (
+                    <div className="space-y-3">
+                      {sidebarKnowledge.map((card) => (
+                        <article
+                          key={card.id}
+                          className="rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 py-3"
+                        >
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="text-[13px] font-semibold">
+                              {card.title}
+                            </div>
+                            <div className="mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-soft)]">
+                              {card.type}
+                            </div>
                           </div>
-                          <div className="mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-soft)]">
-                            {card.type}
-                          </div>
-                        </div>
-                        <p className="mt-2 text-[12px] leading-5 text-[var(--text-soft)]">
-                          {card.body}
-                        </p>
-                      </article>
-                    ))}
-                  </div>
+                          <p className="mt-2 text-[12px] leading-5 text-[var(--text-soft)]">
+                            {card.body}
+                          </p>
+                        </article>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="rounded-[12px] border border-dashed border-[var(--border)] bg-[var(--surface)] px-4 py-4 text-[12px] leading-5 text-[var(--text-soft)]">
+                      No active knowledge cards yet. Add product or policy notes in
+                      the AI setup workspace.
+                    </div>
+                  )}
                 </div>
               </>
             ) : null}
           </aside>
+            </>
+          )}
         </section>
       </main>
-
-      <AiSettingsModal
-        channelLabel={selectedConversationChannel.label}
-        credentialMessage={credentialMessage}
-        draftProfiles={Object.values(MODEL_PROFILES)}
-        guidance={modalGuidance}
-        isSavingCredential={isSavingCredential}
-        modelOverride={modalModelOverride}
-        onClose={() => setIsSettingsOpen(false)}
-        onGuidanceChange={setModalGuidance}
-        onModelOverrideChange={setModalModelOverride}
-        onSave={handleSaveSettings}
-        onSaveProviderKey={handleSaveProviderKey}
-        open={isSettingsOpen}
-        providerRoutes={Object.values(PROVIDER_ROUTES)}
-        providerStatuses={providerStatuses}
-        selectedProfileId={modalProfileId}
-        selectedRouteId={modalRouteId}
-        setSelectedProfileId={(value) =>
-          setModalProfileId(value as ModelProfileId)
-        }
-        setSelectedRouteId={(value) =>
-          setModalRouteId(value as ProviderRouteId)
-        }
-      />
     </>
   );
 }
