@@ -35,3 +35,38 @@
  PUT /api/admin/state 200 in 9ms (next.js: 3ms, application-code: 7ms)
  POST /api/drafts 200 in 7ms (next.js: 3ms, application-code: 5ms)
  POST /api/drafts 200 in 7ms (next.js: 3ms, application-code: 5ms)
+✓ Compiled in 88ms
+ GET / 200 in 216ms (next.js: 97ms, application-code: 119ms)
+ GET / 200 in 77ms (next.js: 3ms, application-code: 74ms)
+ GET / 200 in 53ms (next.js: 4ms, application-code: 49ms)
+ GET / 200 in 53ms (next.js: 19ms, application-code: 34ms)
+✓ Compiled in 34ms
+ GET /api/admin/state 200 in 133ms (next.js: 47ms, application-code: 85ms)
+ GET /api/gorgias/credentials 200 in 133ms (next.js: 116ms, application-code: 17ms)
+ GET /api/ai/providers 200 in 134ms (next.js: 89ms, application-code: 45ms)
+ GET /api/evals/state 200 in 135ms (next.js: 68ms, application-code: 67ms)
+ GET /api/ai/providers 200 in 77ms (next.js: 34ms, application-code: 44ms)
+ GET /api/gorgias/credentials 200 in 79ms (next.js: 63ms, application-code: 16ms)
+ GET /api/evals/state 200 in 84ms (next.js: 30ms, application-code: 54ms)
+ GET / 200 in 433ms (next.js: 88ms, application-code: 345ms)
+ GET / 200 in 94ms (next.js: 7ms, application-code: 86ms)
+ GET /api/ai/providers 200 in 73ms (next.js: 11ms, application-code: 61ms)
+ GET /api/gorgias/credentials 200 in 68ms (next.js: 3ms, application-code: 65ms)
+ GET /api/intercom/credentials 200 in 70ms (next.js: 26ms, application-code: 44ms)
+ GET /api/admin/state 200 in 88ms (next.js: 4ms, application-code: 84ms)
+ GET /api/evals/state 200 in 89ms (next.js: 7ms, application-code: 82ms)
+ GET /api/intercom/import 200 in 85ms (next.js: 50ms, application-code: 35ms)
+ GET /api/ai/providers 200 in 34ms (next.js: 4ms, application-code: 30ms)
+ GET /api/gorgias/credentials 200 in 53ms (next.js: 8ms, application-code: 45ms)
+ GET /api/intercom/credentials 200 in 40ms (next.js: 6ms, application-code: 34ms)
+ POST /api/drafts 200 in 38ms (next.js: 32ms, application-code: 6ms)
+ GET /api/admin/state 200 in 85ms (next.js: 10ms, application-code: 75ms)
+ GET /api/evals/state 200 in 84ms (next.js: 15ms, application-code: 69ms)
+ GET /api/intercom/import 200 in 52ms (next.js: 5ms, application-code: 47ms)
+ POST /api/drafts 200 in 5ms (next.js: 1762µs, application-code: 4ms)
+✓ Compiled in 67ms
+✓ Compiled in 39ms
+✓ Compiled in 53ms
+✓ Compiled in 46ms
+ GET /api/admin/state 200 in 9ms (next.js: 3ms, application-code: 6ms)
+ GET /api/admin/state 200 in 8ms (next.js: 2ms, application-code: 6ms)

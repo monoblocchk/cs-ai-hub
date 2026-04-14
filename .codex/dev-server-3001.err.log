@@ -1,0 +1,27 @@
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+Each child in a list should have a unique "key" prop.
+
+Check the render method of `InboxWorkspace`. See https://react.dev/link/warning-keys for more information.
+Each child in a list should have a unique "key" prop.
+
+Check the render method of `InboxWorkspace`. See https://react.dev/link/warning-keys for more information.
+[browser] Each child in a list should have a unique "key" prop.
+
+Check the render method of `InboxWorkspace`. See https://react.dev/link/warning-keys for more information. 
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15127:29)
+    at runWithFiberInDEV (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at warnForMissingKey (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15126:17)
+    at warnOnInvalidKey (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4091:21)
+    at reconcileChildrenArray (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4129:160)
+    at reconcileChildFibersImpl (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4236:51)
+    at <unknown> (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:4261:39)
+    at reconcileChildren (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:5898:51)
+    at beginWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:6758:1573)
+    at runWithFiberInDEV (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:965:74)
+    at performUnitOfWork (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9555:97)
+    at workLoopConcurrentByScheduler (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9551:58)
+    at renderRootConcurrent (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9534:71)
+    at performWorkOnRoot (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:9061:150)
+    at performWorkOnRootViaSchedulerTask (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:10255:9)
+    at MessagePort.performWorkUntilDeadline (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js:2647:64) (file://D:/OneDrive/Monoblocc CS AI Hub/.next/dev/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js:15127:29)

@@ -17,11 +17,29 @@ function createEmptyStyleGuidance(): Record<DraftStyle, string> {
   };
 }
 
+const DEFAULT_KNOWLEDGE_MATCH_TERMS: Record<string, string> = {
+  "creator-bundle": "creator bundle, starter bundle, upgrading desk rig, cable cleanliness, camera stability",
+  "desk-clamp-fit": "desk clamp, clamp fit, desk thickness, thick edge, cable tray, 55 mm, compatibility",
+  "magic-arm-kit": "magic arm, mirrorless camera, mic, webcam, flexible positioning, angle changes, overhead",
+  "shipping-sla": "shipping, dispatch, courier, delivery, label created, order status, business days",
+  "single-rod-mount": "single rod, fixed mount, compact desk, overhead shot, clean footprint, simple setup",
+};
+
+const DEFAULT_KNOWLEDGE_CHANNELS: Record<string, string[]> = {
+  "creator-bundle": ["instagram-comments", "instagram-dm", "website-chat"],
+  "desk-clamp-fit": ["email", "website-chat", "whatsapp"],
+  "magic-arm-kit": ["instagram-comments", "instagram-dm", "website-chat", "facebook"],
+  "shipping-sla": ["email", "whatsapp", "website-chat"],
+  "single-rod-mount": ["instagram-comments", "instagram-dm", "email", "website-chat"],
+};
+
 function seedKnowledgeCards(): ManagedKnowledgeCard[] {
   const now = new Date().toISOString();
 
   return knowledgeCards.map((card) => ({
     ...card,
+    channelIds: DEFAULT_KNOWLEDGE_CHANNELS[card.id] ?? [],
+    matchTerms: DEFAULT_KNOWLEDGE_MATCH_TERMS[card.id] ?? "",
     sourceType: card.source.startsWith("http") || card.source.includes(".com/")
       ? "web"
       : "manual",
@@ -100,8 +118,12 @@ export function createDefaultAdminState(): AdminState {
 function normalizeManagedCard(card: Partial<ManagedKnowledgeCard>, fallbackTime: string): ManagedKnowledgeCard {
   return {
     body: card.body ?? "",
+    channelIds: Array.isArray(card.channelIds)
+      ? card.channelIds.filter((channelId): channelId is string => typeof channelId === "string")
+      : DEFAULT_KNOWLEDGE_CHANNELS[card.id ?? ""] ?? [],
     freshness: card.freshness ?? "Manual note",
     id: card.id ?? `knowledge-${Math.random().toString(36).slice(2, 10)}`,
+    matchTerms: card.matchTerms ?? DEFAULT_KNOWLEDGE_MATCH_TERMS[card.id ?? ""] ?? "",
     source: card.source ?? "",
     sourceType: card.sourceType === "web" ? "web" : "manual",
     status: card.status === "draft" ? "draft" : "active",

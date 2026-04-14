@@ -31,6 +31,8 @@ export type DraftGenerationRequest = {
 export type DraftGenerationDiagnostics = {
   generatedAt: string;
   guidanceNotes: string[];
+  knowledgeSnippetCount: number;
+  knowledgeSnippetIds: string[];
   model: string;
   profileDescription: string;
   profileId: ModelProfileId;

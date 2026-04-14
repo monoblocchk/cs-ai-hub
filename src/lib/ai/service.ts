@@ -283,6 +283,7 @@ export async function generateDraftResponse(
   const route = PROVIDER_ROUTES[request.providerRouteId] ?? PROVIDER_ROUTES.mock;
   const profile = MODEL_PROFILES[request.profileId];
   const guidance = resolveGuidance(request.conversation, request.guidanceOverrides);
+  const knowledgeSnippetIds = request.knowledgeCards.map((card) => card.id);
 
   try {
     if (route.id === "mock") {
@@ -290,6 +291,8 @@ export async function generateDraftResponse(
         diagnostics: {
           generatedAt: new Date().toISOString(),
           guidanceNotes: guidance.guidanceNotes,
+          knowledgeSnippetCount: request.knowledgeCards.length,
+          knowledgeSnippetIds,
           model: route.defaultModels[request.profileId],
           profileDescription: profile.description,
           profileId: profile.id,
@@ -309,6 +312,8 @@ export async function generateDraftResponse(
       diagnostics: {
         generatedAt: new Date().toISOString(),
         guidanceNotes: guidance.guidanceNotes,
+        knowledgeSnippetCount: request.knowledgeCards.length,
+        knowledgeSnippetIds,
         model: generated.model,
         profileDescription: profile.description,
         profileId: profile.id,
@@ -327,6 +332,8 @@ export async function generateDraftResponse(
       diagnostics: {
         generatedAt: new Date().toISOString(),
         guidanceNotes: guidance.guidanceNotes,
+        knowledgeSnippetCount: request.knowledgeCards.length,
+        knowledgeSnippetIds,
         model: cleanModelOverride(request.modelOverride) ?? route.defaultModels[request.profileId],
         profileDescription: profile.description,
         profileId: profile.id,

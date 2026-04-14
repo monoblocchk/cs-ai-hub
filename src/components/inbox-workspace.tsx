@@ -33,12 +33,15 @@ import type {
   IntercomImportResponse,
 } from "@/lib/intercom/types";
 import {
+  resolveKnowledgeForConversation,
+  toPromptKnowledgeCards,
+} from "@/lib/knowledge/retrieval";
+import {
   channels,
   conversations,
   knowledgeCards,
   type Conversation,
   type ConversationSource,
-  type KnowledgeCard,
   type Message,
 } from "@/lib/mock-data";
 
@@ -57,6 +60,8 @@ function createFallbackKnowledgeCards(): ManagedKnowledgeCard[] {
 
   return knowledgeCards.map((card) => ({
     ...card,
+    channelIds: [],
+    matchTerms: "",
     sourceType:
       card.source.startsWith("http") || card.source.includes(".com/")
         ? "web"
@@ -213,35 +218,12 @@ function serializeAdminState(state: AdminState) {
   return JSON.stringify(state);
 }
 
-function getKnowledgeForConversation(
-  conversation: Conversation,
-  managedCards: ManagedKnowledgeCard[],
-) {
-  const activeCards = managedCards.filter((card) => card.status === "active");
-  const referencedIds = new Set(conversation.knowledgeIds);
-  const prioritized = activeCards.filter((card) => referencedIds.has(card.id));
-  const supplemental = activeCards.filter((card) => !referencedIds.has(card.id));
-
-  return [...prioritized, ...supplemental];
-}
-
-function toPromptKnowledgeCards(cards: ManagedKnowledgeCard[]): KnowledgeCard[] {
-  return cards.map((card) => ({
-    body: card.body,
-    freshness: card.freshness,
-    id: card.id,
-    source: card.source,
-    title: card.title,
-    type: card.type,
-  }));
-}
-
 function getDraftKnowledgeCards(
   conversation: Conversation,
   managedCards: ManagedKnowledgeCard[],
 ) {
   return toPromptKnowledgeCards(
-    getKnowledgeForConversation(conversation, managedCards).slice(0, 6),
+    resolveKnowledgeForConversation(conversation, managedCards).slice(0, 6),
   );
 }
 
@@ -447,12 +429,12 @@ export function InboxWorkspace() {
       (channel) => channel.id === selectedConversation?.channelId,
     ) ?? activeChannel;
   const relatedKnowledge = selectedConversation
-    ? getKnowledgeForConversation(selectedConversation, managedKnowledgeCards)
+    ? resolveKnowledgeForConversation(selectedConversation, managedKnowledgeCards)
     : [];
   const sidebarKnowledge = relatedKnowledge.slice(0, 5);
   const knowledgeSignature = relatedKnowledge
     .slice(0, 6)
-    .map((card) => `${card.id}:${card.updatedAt}:${card.status}`)
+    .map((hit) => `${hit.card.id}:${hit.card.updatedAt}:${hit.card.status}:${hit.score}`)
     .join("|");
   const activeGuidance: GuidanceOverrides = {
     channel:
@@ -1168,8 +1150,10 @@ export function InboxWorkspace() {
           ...current.knowledge.cards,
           {
             body: "",
+            channelIds: [],
             freshness: "Manual note",
             id: `knowledge-${Date.now()}`,
+            matchTerms: "",
             source: "",
             sourceType: "manual",
             status: "draft",
@@ -2289,22 +2273,35 @@ export function InboxWorkspace() {
                 <div className="scroll-subtle min-h-0 flex-1 overflow-y-auto px-4 py-4">
                   {sidebarKnowledge.length > 0 ? (
                     <div className="space-y-3">
-                      {sidebarKnowledge.map((card) => (
+                      {sidebarKnowledge.map((hit) => (
                         <article
-                          key={card.id}
+                          key={hit.card.id}
                           className="rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 py-3"
                         >
                           <div className="flex items-center justify-between gap-2">
                             <div className="text-[13px] font-semibold">
-                              {card.title}
+                              {hit.card.title}
                             </div>
                             <div className="mono text-[10px] uppercase tracking-[0.16em] text-[var(--text-soft)]">
-                              {card.type}
+                              {hit.card.type}
                             </div>
                           </div>
                           <p className="mt-2 text-[12px] leading-5 text-[var(--text-soft)]">
-                            {card.body}
+                            {hit.card.body}
                           </p>
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {hit.reasons.slice(0, 2).map((reason) => (
+                              <span
+                                key={reason}
+                                className="rounded-full bg-[var(--white)] px-2 py-0.5 text-[10px] font-medium text-[var(--text-soft)]"
+                              >
+                                {reason}
+                              </span>
+                            ))}
+                            <span className="rounded-full bg-[#fff1ec] px-2 py-0.5 text-[10px] font-semibold text-[var(--orange)]">
+                              {hit.score}
+                            </span>
+                          </div>
                         </article>
                       ))}
                     </div>
@@ -2458,6 +2455,10 @@ function DraftMetaRow({
               <span>{profileText}</span>
               <span className="text-[var(--border)]">/</span>
               <span className="truncate">{modelText}</span>
+              <span className="text-[var(--border)]">/</span>
+              <span>
+                {diagnostics?.knowledgeSnippetCount ?? 0} knowledge hits
+              </span>
             </div>
           </div>
           <div

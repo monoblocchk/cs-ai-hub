@@ -2,6 +2,8 @@ import type { DraftStyle, ModelProfileId, ProviderRouteId } from "@/lib/ai/types
 import type { KnowledgeCard } from "@/lib/mock-data";
 
 export type ManagedKnowledgeCard = KnowledgeCard & {
+  channelIds: string[];
+  matchTerms: string;
   sourceType: "manual" | "web";
   status: "active" | "draft";
   updatedAt: string;

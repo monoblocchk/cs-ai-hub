@@ -1,37 +1,17 @@
 import { NextResponse } from "next/server";
 import { generateDraftResponse } from "@/lib/ai/service";
 import type { DraftGenerationRequest } from "@/lib/ai/types";
-import type { ManagedKnowledgeCard } from "@/lib/admin/types";
 import type {
   EvalExperiment,
   EvalRun,
   EvalRunRequest,
   EvalRunResult,
 } from "@/lib/evals/types";
-import { channels, conversations, type Conversation, type KnowledgeCard } from "@/lib/mock-data";
-
-function getKnowledgeForConversation(
-  conversation: Conversation,
-  managedCards: ManagedKnowledgeCard[],
-) {
-  const activeCards = managedCards.filter((card) => card.status === "active");
-  const referencedIds = new Set(conversation.knowledgeIds);
-  const prioritized = activeCards.filter((card) => referencedIds.has(card.id));
-  const supplemental = activeCards.filter((card) => !referencedIds.has(card.id));
-
-  return [...prioritized, ...supplemental].slice(0, 6);
-}
-
-function toPromptKnowledgeCards(cards: ManagedKnowledgeCard[]): KnowledgeCard[] {
-  return cards.map((card) => ({
-    body: card.body,
-    freshness: card.freshness,
-    id: card.id,
-    source: card.source,
-    title: card.title,
-    type: card.type,
-  }));
-}
+import {
+  resolveKnowledgeForConversation,
+  toPromptKnowledgeCards,
+} from "@/lib/knowledge/retrieval";
+import { channels, conversations } from "@/lib/mock-data";
 
 function buildGuidanceChannel(
   baseChannelGuidance: string,
@@ -71,7 +51,10 @@ export async function POST(request: Request) {
     const channel =
       channels.find((entry) => entry.id === conversation.channelId) ?? channels[0];
     const knowledgeCards = toPromptKnowledgeCards(
-      getKnowledgeForConversation(conversation, payload.adminState.knowledge.cards),
+      resolveKnowledgeForConversation(
+        conversation,
+        payload.adminState.knowledge.cards,
+      ).slice(0, 6),
     );
     const results: EvalRunResult[] = [];
 

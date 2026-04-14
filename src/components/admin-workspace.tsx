@@ -843,6 +843,74 @@ export function AdminWorkspace({
                             />
                           </div>
 
+                          <div className="mt-3 grid gap-3 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                            <label className="block">
+                              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-soft)]">
+                                Retrieval terms
+                              </span>
+                              <textarea
+                                value={card.matchTerms}
+                                onChange={(event) =>
+                                  onKnowledgeCardChange(card.id, {
+                                    matchTerms: event.target.value,
+                                  })
+                                }
+                                rows={3}
+                                placeholder="Comma-separated words or phrases that should pull this card into a draft."
+                                className="mt-2 w-full resize-none rounded-[12px] border border-[var(--border)] bg-[var(--white)] px-4 py-3 text-[13px] leading-6 outline-none transition placeholder:text-[var(--text-soft)] focus:border-[var(--orange)]"
+                              />
+                            </label>
+
+                            <div>
+                              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--text-soft)]">
+                                Channel scope
+                              </div>
+                              <div className="mt-2 flex flex-wrap gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    onKnowledgeCardChange(card.id, {
+                                      channelIds: [],
+                                    })
+                                  }
+                                  className={`h-8 rounded-full border px-3 text-[11px] font-semibold transition ${
+                                    card.channelIds.length === 0
+                                      ? "border-[var(--orange)] bg-[#fff1ec] text-[var(--orange)]"
+                                      : "border-[var(--border)] bg-[var(--white)] text-[var(--text-soft)] hover:border-[var(--orange)]"
+                                  }`}
+                                >
+                                  All channels
+                                </button>
+                                {channels.map((channel) => {
+                                  const isSelected = card.channelIds.includes(channel.id);
+
+                                  return (
+                                    <button
+                                      key={channel.id}
+                                      type="button"
+                                      onClick={() =>
+                                        onKnowledgeCardChange(card.id, {
+                                          channelIds: isSelected
+                                            ? card.channelIds.filter(
+                                                (channelId) => channelId !== channel.id,
+                                              )
+                                            : [...card.channelIds, channel.id],
+                                        })
+                                      }
+                                      className={`h-8 rounded-full border px-3 text-[11px] font-semibold transition ${
+                                        isSelected
+                                          ? "border-[var(--orange)] bg-[#fff1ec] text-[var(--orange)]"
+                                          : "border-[var(--border)] bg-[var(--white)] text-[var(--text-soft)] hover:border-[var(--orange)]"
+                                      }`}
+                                    >
+                                      {channel.shortLabel}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </div>
+
                           <textarea
                             value={card.body}
                             onChange={(event) =>
