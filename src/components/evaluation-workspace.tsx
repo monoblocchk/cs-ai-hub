@@ -14,7 +14,7 @@ import type {
   EvalRunResult,
   EvalState,
 } from "@/lib/evals/types";
-import type { Channel, Conversation } from "@/lib/mock-data";
+import type { Channel, Conversation, ConversationSource } from "@/lib/mock-data";
 
 type EvaluationWorkspaceProps = {
   adminState: AdminState;
@@ -96,6 +96,32 @@ function buildProviderTone(
   };
 }
 
+function getConversationSource(conversation: Conversation): ConversationSource {
+  return conversation.source ?? "mock";
+}
+
+function getConversationSourceLabel(conversation: Conversation) {
+  switch (getConversationSource(conversation)) {
+    case "gorgias":
+      return "Gorgias";
+    case "intercom":
+      return "Intercom";
+    case "mock":
+      return "Mock";
+  }
+}
+
+function getConversationSourceTone(conversation: Conversation) {
+  switch (getConversationSource(conversation)) {
+    case "gorgias":
+      return "bg-[#eef6ff] text-[#2563eb]";
+    case "intercom":
+      return "bg-[#ecfeff] text-[#0e7490]";
+    case "mock":
+      return "bg-[var(--gray)] text-[var(--graphite)]";
+  }
+}
+
 export function EvaluationWorkspace({
   adminState,
   baselineExperiment,
@@ -165,9 +191,9 @@ export function EvaluationWorkspace({
                   Scenario comparisons and model experiments
                 </div>
                 <p className="mt-2 max-w-[900px] text-[13px] leading-6 text-[var(--text-soft)]">
-                  Run the same mock conversation against the current admin
-                  baseline and any saved experiment slots, then score the
-                  outputs before we connect live Gorgias data.
+                  Run the same mock, Intercom, or preview conversation against
+                  the current admin baseline and any saved experiment slots,
+                  then score the outputs before send actions go live.
                 </p>
               </div>
 
@@ -265,6 +291,18 @@ export function EvaluationWorkspace({
                             <div className="mt-1 text-[12px] text-[var(--text-soft)]">
                               {channel.label}
                             </div>
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              <span
+                                className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${getConversationSourceTone(conversation)}`}
+                              >
+                                {getConversationSourceLabel(conversation)}
+                              </span>
+                              {conversation.historical ? (
+                                <span className="rounded-full bg-[#ecfeff] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] text-[#0e7490]">
+                                  History
+                                </span>
+                              ) : null}
+                            </div>
                             <p className="mt-2 line-clamp-3 text-[12px] leading-5 text-[var(--text-soft)]">
                               {conversation.latestCustomerMessage}
                             </p>
@@ -285,7 +323,7 @@ export function EvaluationWorkspace({
                     {selectedConversation.customerName}
                   </div>
                   <div className="mt-1 text-[12px] text-[var(--text-soft)]">
-                    {selectedChannel.label} · {selectedConversation.intent}
+                    {selectedChannel.label} / {getConversationSourceLabel(selectedConversation)} / {selectedConversation.intent}
                   </div>
                   <p className="mt-3 text-[13px] leading-6 text-[var(--text)]">
                     {selectedConversation.latestCustomerMessage}

@@ -28,11 +28,16 @@ import type {
   GorgiasConnectionStatus,
   GorgiasPreviewResponse,
 } from "@/lib/gorgias/types";
+import type {
+  IntercomConnectionStatus,
+  IntercomImportResponse,
+} from "@/lib/intercom/types";
 import {
   channels,
   conversations,
   knowledgeCards,
   type Conversation,
+  type ConversationSource,
   type KnowledgeCard,
   type Message,
 } from "@/lib/mock-data";
@@ -169,6 +174,15 @@ function createFallbackAdminState(): AdminState {
       lastPreviewAt: "",
       ticketLimit: 8,
     },
+    intercom: {
+      conversationLimit: 12,
+      defaultInboxMode: "mock",
+      importedSince: "",
+      importedUntil: "",
+      lastImportAt: "",
+      lastImportSummary: "",
+      region: "us",
+    },
     knowledge: {
       cards: createFallbackKnowledgeCards(),
       webSources: [
@@ -281,11 +295,40 @@ function createBaselineExperiment(adminState: AdminState): EvalExperiment {
 
 const FALLBACK_EVAL_STATE = createFallbackEvalState();
 
+type ConversationDataSet = "gorgias-preview" | "intercom-history" | "mock";
+type SourceFilter = "all" | ConversationSource | "historical";
+
+function getConversationSource(conversation: Conversation): ConversationSource {
+  return conversation.source ?? "mock";
+}
+
+function getConversationSourceLabel(conversation: Conversation) {
+  switch (getConversationSource(conversation)) {
+    case "gorgias":
+      return "Gorgias";
+    case "intercom":
+      return "Intercom";
+    case "mock":
+      return "Mock";
+  }
+}
+
+function getConversationSourceTone(conversation: Conversation) {
+  switch (getConversationSource(conversation)) {
+    case "gorgias":
+      return "bg-[#eef6ff] text-[#2563eb]";
+    case "intercom":
+      return "bg-[#ecfeff] text-[#0e7490]";
+    case "mock":
+      return "bg-[var(--gray)] text-[var(--graphite)]";
+  }
+}
+
 export function InboxWorkspace() {
   const [conversationData, setConversationData] = useState(conversations);
-  const [conversationSource, setConversationSource] = useState<
-    "mock" | "gorgias-preview"
-  >("mock");
+  const [conversationSource, setConversationSource] =
+    useState<ConversationDataSet>("mock");
+  const [sourceFilter, setSourceFilter] = useState<SourceFilter>("all");
   const [selectedChannelId, setSelectedChannelId] = useState(channels[0].id);
   const [selectedConversationId, setSelectedConversationId] = useState(
     conversations[0].id,
@@ -312,15 +355,23 @@ export function InboxWorkspace() {
   >([]);
   const [gorgiasConnectionStatus, setGorgiasConnectionStatus] =
     useState<GorgiasConnectionStatus | null>(null);
+  const [intercomConnectionStatus, setIntercomConnectionStatus] =
+    useState<IntercomConnectionStatus | null>(null);
   const [credentialMessage, setCredentialMessage] = useState<string | null>(
     null,
   );
   const [gorgiasCredentialMessage, setGorgiasCredentialMessage] = useState<
     string | null
   >(null);
+  const [intercomCredentialMessage, setIntercomCredentialMessage] = useState<
+    string | null
+  >(null);
   const [adminSaveMessage, setAdminSaveMessage] = useState<string | null>(null);
   const [evalSaveMessage, setEvalSaveMessage] = useState<string | null>(null);
   const [gorgiasPreviewMessage, setGorgiasPreviewMessage] = useState<
+    string | null
+  >(null);
+  const [intercomImportMessage, setIntercomImportMessage] = useState<
     string | null
   >(null);
   const [isLoadingAdminState, setIsLoadingAdminState] = useState(true);
@@ -331,7 +382,10 @@ export function InboxWorkspace() {
   const [isSavingCredential, setIsSavingCredential] = useState(false);
   const [isSavingGorgiasCredential, setIsSavingGorgiasCredential] =
     useState(false);
+  const [isSavingIntercomCredential, setIsSavingIntercomCredential] =
+    useState(false);
   const [isRunningGorgiasPreview, setIsRunningGorgiasPreview] = useState(false);
+  const [isRunningIntercomImport, setIsRunningIntercomImport] = useState(false);
   const [savedAdminSnapshot, setSavedAdminSnapshot] = useState(() =>
     serializeAdminState(FALLBACK_ADMIN_STATE),
   );
@@ -354,11 +408,25 @@ export function InboxWorkspace() {
     void loadEvalState();
     void refreshProviderStatuses();
     void refreshGorgiasStatus();
+    void refreshIntercomStatus();
+    void loadStoredIntercomImport(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const activeChannel =
     channels.find((channel) => channel.id === selectedChannelId) ?? channels[0];
-  const channelConversations = conversationData.filter(
+  const sourceFilteredConversations = conversationData.filter((conversation) => {
+    if (sourceFilter === "all") {
+      return true;
+    }
+
+    if (sourceFilter === "historical") {
+      return Boolean(conversation.historical);
+    }
+
+    return getConversationSource(conversation) === sourceFilter;
+  });
+  const channelConversations = sourceFilteredConversations.filter(
     (conversation) => conversation.channelId === activeChannel.id,
   );
   const visibleConversations = filterConversations(
@@ -429,6 +497,20 @@ export function InboxWorkspace() {
         : currentProviderStatus?.savedToEnvFile
           ? "restart"
           : "setup";
+  const sourceCounts: Record<SourceFilter, number> = {
+    all: conversationData.length,
+    gorgias: conversationData.filter(
+      (conversation) => getConversationSource(conversation) === "gorgias",
+    ).length,
+    historical: conversationData.filter((conversation) => conversation.historical)
+      .length,
+    intercom: conversationData.filter(
+      (conversation) => getConversationSource(conversation) === "intercom",
+    ).length,
+    mock: conversationData.filter(
+      (conversation) => getConversationSource(conversation) === "mock",
+    ).length,
+  };
 
   useEffect(() => {
     if (
@@ -555,6 +637,10 @@ export function InboxWorkspace() {
       setAdminState(payload);
       setSavedAdminSnapshot(serializeAdminState(payload));
       setAdminSaveMessage(null);
+
+      if (payload.intercom.defaultInboxMode === "intercom-history") {
+        void loadStoredIntercomImport(true);
+      }
     } catch (error) {
       setAdminSaveMessage(
         error instanceof Error
@@ -638,6 +724,71 @@ export function InboxWorkspace() {
     }
   }
 
+  async function refreshIntercomStatus() {
+    try {
+      const response = await fetch("/api/intercom/credentials");
+
+      if (!response.ok) {
+        throw new Error("Unable to load Intercom connection status.");
+      }
+
+      const payload = (await response.json()) as {
+        connection?: IntercomConnectionStatus;
+      };
+
+      setIntercomConnectionStatus(payload.connection ?? null);
+    } catch (error) {
+      setIntercomCredentialMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to load Intercom connection status.",
+      );
+    }
+  }
+
+  async function loadStoredIntercomImport(loadIntoInbox = false) {
+    try {
+      const response = await fetch("/api/intercom/import");
+
+      if (!response.ok) {
+        throw new Error("Unable to load stored Intercom history.");
+      }
+
+      const payload = (await response.json()) as
+        | IntercomImportResponse
+        | { error?: string };
+
+      if ("error" in payload) {
+        throw new Error(payload.error ?? "Unable to load stored Intercom history.");
+      }
+
+      if (!("conversations" in payload)) {
+        throw new Error("Unable to load stored Intercom history.");
+      }
+
+      if (!payload.conversations.length) {
+        return;
+      }
+
+      if (loadIntoInbox || adminState.intercom.defaultInboxMode === "intercom-history") {
+        setConversationData(payload.conversations);
+        setConversationSource("intercom-history");
+        setSelectedChannelId(payload.conversations[0]?.channelId ?? channels[0].id);
+        setSelectedConversationId(
+          payload.conversations[0]?.id ?? conversations[0]?.id ?? "",
+        );
+        setSourceFilter("all");
+        setIntercomImportMessage(payload.connectionSummary);
+      }
+    } catch (error) {
+      setIntercomImportMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to load stored Intercom history.",
+      );
+    }
+  }
+
   function populateEditor(body: string) {
     setEditorText(body);
     requestAnimationFrame(() => {
@@ -688,12 +839,42 @@ export function InboxWorkspace() {
 
   function handleChannelSelect(channelId: string) {
     const nextConversation =
-      conversationData.find(
+      sourceFilteredConversations.find(
         (conversation) => conversation.channelId === channelId,
       ) ?? conversationData[0];
 
     setSelectedChannelId(channelId);
-    setSelectedConversationId(nextConversation.id);
+    setSelectedConversationId(nextConversation?.id ?? "");
+    setSearchTerm("");
+    setEditorText("");
+    setGenerationError(null);
+  }
+
+  function handleSourceFilterSelect(nextFilter: SourceFilter) {
+    const nextFilteredConversations = conversationData.filter((conversation) => {
+      if (nextFilter === "all") {
+        return true;
+      }
+
+      if (nextFilter === "historical") {
+        return Boolean(conversation.historical);
+      }
+
+      return getConversationSource(conversation) === nextFilter;
+    });
+    const currentChannelConversation = nextFilteredConversations.find(
+      (conversation) => conversation.channelId === selectedChannelId,
+    );
+    const nextConversation =
+      currentChannelConversation ?? nextFilteredConversations[0] ?? conversationData[0];
+
+    setSourceFilter(nextFilter);
+
+    if (nextConversation) {
+      setSelectedChannelId(nextConversation.channelId);
+      setSelectedConversationId(nextConversation.id);
+    }
+
     setSearchTerm("");
     setEditorText("");
     setGenerationError(null);
@@ -932,6 +1113,20 @@ export function InboxWorkspace() {
     setAdminSaveMessage(null);
   }
 
+  function handleIntercomFieldChange(
+    field: keyof AdminState["intercom"],
+    value: AdminState["intercom"][keyof AdminState["intercom"]],
+  ) {
+    setAdminState((current) => ({
+      ...current,
+      intercom: {
+        ...current.intercom,
+        [field]: value,
+      },
+    }));
+    setAdminSaveMessage(null);
+  }
+
   function handleChannelGuidanceChange(channelId: string, value: string) {
     setAdminState((current) => ({
       ...current,
@@ -1122,6 +1317,45 @@ export function InboxWorkspace() {
     }
   }
 
+  async function handleSaveIntercomAccessToken(apiKey: string) {
+    setIsSavingIntercomCredential(true);
+    setIntercomCredentialMessage(null);
+
+    try {
+      const response = await fetch("/api/intercom/credentials", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ apiKey }),
+      });
+
+      const payload = (await response.json()) as {
+        connection?: IntercomConnectionStatus;
+        error?: string;
+        message?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Unable to save Intercom access token.");
+      }
+
+      setIntercomConnectionStatus(payload.connection ?? null);
+      setIntercomCredentialMessage(
+        payload.message ??
+          "Intercom access token saved. Restart the dev server to activate it.",
+      );
+    } catch (error) {
+      setIntercomCredentialMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to save Intercom access token.",
+      );
+    } finally {
+      setIsSavingIntercomCredential(false);
+    }
+  }
+
   async function handleRunGorgiasPreview() {
     setIsRunningGorgiasPreview(true);
     setGorgiasPreviewMessage(null);
@@ -1183,6 +1417,79 @@ export function InboxWorkspace() {
       );
     } finally {
       setIsRunningGorgiasPreview(false);
+    }
+  }
+
+  async function handleRunIntercomImport() {
+    setIsRunningIntercomImport(true);
+    setIntercomImportMessage(null);
+
+    try {
+      const response = await fetch("/api/intercom/import", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          conversationLimit: adminState.intercom.conversationLimit,
+          importedSince: adminState.intercom.importedSince,
+          importedUntil: adminState.intercom.importedUntil,
+          region: adminState.intercom.region,
+        }),
+      });
+
+      const payload = (await response.json()) as
+        | IntercomImportResponse
+        | { error?: string };
+
+      if (!response.ok || "error" in payload) {
+        throw new Error(
+          "error" in payload && payload.error
+            ? payload.error
+            : "Unable to import Intercom history.",
+        );
+      }
+
+      const imported = payload as IntercomImportResponse;
+      const nextState: AdminState = {
+        ...adminState,
+        intercom: {
+          ...adminState.intercom,
+          lastImportAt: imported.storedAt ?? imported.fetchedAt,
+          lastImportSummary: imported.connectionSummary,
+        },
+      };
+
+      if (imported.conversations.length > 0) {
+        setConversationData(imported.conversations);
+        setConversationSource("intercom-history");
+        setSelectedChannelId(imported.conversations[0]?.channelId ?? channels[0].id);
+        setSelectedConversationId(
+          imported.conversations[0]?.id ?? conversations[0]?.id ?? "",
+        );
+        setSourceFilter("all");
+        setSearchTerm("");
+        setEditorText("");
+        setGenerationError(null);
+        setViewMode("inbox");
+      }
+
+      setAdminState(nextState);
+      setIntercomImportMessage(
+        imported.conversations.length > 0
+          ? imported.connectionSummary
+          : `${imported.connectionSummary} No conversations matched the import window.`,
+      );
+
+      await handleSaveAdminState(nextState);
+    } catch (error) {
+      setIntercomImportMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to import Intercom history.",
+      );
+    } finally {
+      setIsRunningIntercomImport(false);
     }
   }
 
@@ -1450,7 +1757,7 @@ export function InboxWorkspace() {
 
   const channelCounts = channels.map((channel) => ({
     id: channel.id,
-    openCount: conversationData.filter(
+    openCount: sourceFilteredConversations.filter(
       (conversation) =>
         conversation.channelId === channel.id && conversation.unreadCount > 0,
     ).length,
@@ -1571,29 +1878,31 @@ export function InboxWorkspace() {
                 </div>
               </button>
 
-              {conversationSource === "gorgias-preview" ? (
+              {conversationSource !== "mock" ? (
                 <button
                   type="button"
                   onClick={() => {
                     setConversationData(conversations);
                     setConversationSource("mock");
+                    setSourceFilter("all");
                     setSelectedChannelId(channels[0].id);
                     setSelectedConversationId(conversations[0].id);
                     setSearchTerm("");
                     setEditorText("");
                     setGenerationError(null);
                     setGorgiasPreviewMessage("Returned the inbox to mock conversations.");
+                    setIntercomImportMessage("Returned the inbox to mock conversations.");
                   }}
                   className="flex w-full items-center justify-between rounded-[10px] border border-transparent px-3 py-3 text-left text-white/72 transition hover:bg-white/6 hover:text-white"
                 >
                   <div>
                     <div className="text-[13px] font-medium">Use mock inbox</div>
                     <div className="mt-1 text-[12px] text-white/45">
-                      Exit the live read-only preview
+                      Exit the connected read-only view
                     </div>
                   </div>
                   <div className="mono rounded-full bg-white/8 px-2 py-1 text-[11px] text-white/72">
-                    live
+                    mock
                   </div>
                 </button>
               ) : null}
@@ -1616,11 +1925,16 @@ export function InboxWorkspace() {
                 gorgiasConnectionStatus={gorgiasConnectionStatus}
                 gorgiasCredentialMessage={gorgiasCredentialMessage}
                 gorgiasPreviewMessage={gorgiasPreviewMessage}
+                intercomConnectionStatus={intercomConnectionStatus}
+                intercomCredentialMessage={intercomCredentialMessage}
+                intercomImportMessage={intercomImportMessage}
                 isAdminDirty={isAdminDirty}
+                isRunningIntercomImport={isRunningIntercomImport}
                 isRunningGorgiasPreview={isRunningGorgiasPreview}
                 isSavingAdminState={isSavingAdminState}
                 isSavingCredential={isSavingCredential}
                 isSavingGorgiasCredential={isSavingGorgiasCredential}
+                isSavingIntercomCredential={isSavingIntercomCredential}
                 knowledgeCards={managedKnowledgeCards}
                 onAddKnowledgeCard={handleAddKnowledgeCard}
                 onAddWebSource={handleAddWebSource}
@@ -1629,13 +1943,16 @@ export function InboxWorkspace() {
                 onDeleteKnowledgeCard={handleDeleteKnowledgeCard}
                 onDeleteWebSource={handleDeleteWebSource}
                 onGorgiasFieldChange={handleGorgiasFieldChange}
+                onIntercomFieldChange={handleIntercomFieldChange}
                 onKnowledgeCardChange={handleKnowledgeCardChange}
                 onModelOverrideChange={handleModelOverrideChange}
                 onProfileChange={handleProfileChange}
                 onProviderRouteChange={handleProviderRouteChange}
                 onRunGorgiasPreview={handleRunGorgiasPreview}
+                onRunIntercomImport={handleRunIntercomImport}
                 onSaveAdminState={handleSaveAdminState}
                 onSaveGorgiasApiKey={handleSaveGorgiasApiKey}
+                onSaveIntercomAccessToken={handleSaveIntercomAccessToken}
                 onSaveProviderKey={handleSaveProviderKey}
                 onStyleGuidanceChange={handleStyleGuidanceChange}
                 onWebSourceChange={handleWebSourceChange}
@@ -1721,6 +2038,37 @@ export function InboxWorkspace() {
                   latest activity
                 </div>
               </div>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {[
+                  ["all", "All"],
+                  ["intercom", "Intercom"],
+                  ["gorgias", "Gorgias"],
+                  ["mock", "Mock"],
+                  ["historical", "History"],
+                ].map(([filterKey, label]) => {
+                  const typedFilter = filterKey as SourceFilter;
+                  const isActive = typedFilter === sourceFilter;
+
+                  return (
+                    <button
+                      key={filterKey}
+                      type="button"
+                      onClick={() => handleSourceFilterSelect(typedFilter)}
+                      disabled={sourceCounts[typedFilter] === 0}
+                      className={`rounded-full border px-2.5 py-1 text-[11px] font-semibold transition ${
+                        isActive
+                          ? "border-[var(--orange)] bg-[#fff1ec] text-[var(--orange)]"
+                          : sourceCounts[typedFilter] === 0
+                            ? "cursor-not-allowed border-[var(--border)] bg-[var(--surface)] text-[var(--text-soft)]/45"
+                            : "border-[var(--border)] bg-[var(--white)] text-[var(--text-soft)] hover:border-[var(--orange)] hover:text-[var(--orange)]"
+                      }`}
+                    >
+                      {label} {sourceCounts[typedFilter]}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="scroll-subtle min-h-0 flex-1 overflow-y-auto">
@@ -1764,6 +2112,11 @@ export function InboxWorkspace() {
                         </p>
 
                         <div className="mt-3 flex items-center gap-2">
+                          <span
+                            className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.12em] ${getConversationSourceTone(conversation)}`}
+                          >
+                            {getConversationSourceLabel(conversation)}
+                          </span>
                           <StatusBadge status={conversation.status} />
                           <PriorityBadge priority={conversation.priority} />
                           {conversation.unreadCount > 0 ? (
@@ -1796,6 +2149,16 @@ export function InboxWorkspace() {
                     </div>
 
                     <div className="flex items-center gap-2">
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${getConversationSourceTone(selectedConversation)}`}
+                      >
+                        {getConversationSourceLabel(selectedConversation)}
+                      </span>
+                      {selectedConversation.historical ? (
+                        <span className="rounded-full bg-[#ecfeff] px-2.5 py-1 text-[11px] font-semibold text-[#0e7490]">
+                          Historical
+                        </span>
+                      ) : null}
                       {selectedConversation.readOnly ? (
                         <span className="rounded-full bg-[#fef3c7] px-2.5 py-1 text-[11px] font-semibold text-[#b45309]">
                           Read-only preview
@@ -1888,7 +2251,7 @@ export function InboxWorkspace() {
                         disabled={!selectedConversation.externalTicketUrl}
                         className="h-10 rounded-[10px] border border-[var(--border)] bg-[var(--white)] px-4 text-[13px] font-medium text-[var(--text)] transition hover:bg-[var(--surface)]"
                       >
-                        Open in Gorgias
+                        Open in {getConversationSourceLabel(selectedConversation)}
                       </button>
                       <button
                         type="button"
@@ -1902,7 +2265,9 @@ export function InboxWorkspace() {
                       >
                         {selectedConversation.readOnly
                           ? "Read-only preview"
-                          : "Send to Gorgias"}
+                          : selectedConversation.source === "gorgias"
+                            ? "Send to Gorgias"
+                            : "Send reply"}
                       </button>
                     </div>
                   </div>
@@ -1974,6 +2339,8 @@ function filterConversations(conversationList: Conversation[], query: string) {
       conversation.customerHandle,
       conversation.latestPreview,
       conversation.intent,
+      getConversationSourceLabel(conversation),
+      conversation.sourceCustomerEmail ?? "",
       conversation.tags.join(" "),
     ]
       .join(" ")

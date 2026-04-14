@@ -5,6 +5,7 @@ import { MODEL_PROFILES, PROVIDER_ROUTES } from "@/lib/ai/catalog";
 import type { DraftStyle, ProviderConnectionStatus } from "@/lib/ai/types";
 import type { AdminState, ManagedKnowledgeCard, ManagedWebSource } from "@/lib/admin/types";
 import type { GorgiasConnectionStatus } from "@/lib/gorgias/types";
+import type { IntercomConnectionStatus } from "@/lib/intercom/types";
 import type { Channel } from "@/lib/mock-data";
 
 const STYLE_FIELDS: Array<{ key: DraftStyle; label: string }> = [
@@ -22,11 +23,16 @@ type AdminWorkspaceProps = {
   gorgiasConnectionStatus: GorgiasConnectionStatus | null;
   gorgiasCredentialMessage: string | null;
   gorgiasPreviewMessage: string | null;
+  intercomConnectionStatus: IntercomConnectionStatus | null;
+  intercomCredentialMessage: string | null;
+  intercomImportMessage: string | null;
   isAdminDirty: boolean;
+  isRunningIntercomImport: boolean;
   isRunningGorgiasPreview: boolean;
   isSavingAdminState: boolean;
   isSavingCredential: boolean;
   isSavingGorgiasCredential: boolean;
+  isSavingIntercomCredential: boolean;
   knowledgeCards: ManagedKnowledgeCard[];
   onAddKnowledgeCard: () => void;
   onAddWebSource: () => void;
@@ -43,11 +49,17 @@ type AdminWorkspaceProps = {
     field: keyof AdminState["gorgias"],
     value: AdminState["gorgias"][keyof AdminState["gorgias"]],
   ) => void;
+  onIntercomFieldChange: (
+    field: keyof AdminState["intercom"],
+    value: AdminState["intercom"][keyof AdminState["intercom"]],
+  ) => void;
   onProviderRouteChange: (value: AdminState["ai"]["providerRouteId"]) => void;
   onProfileChange: (value: AdminState["ai"]["profileId"]) => void;
   onRunGorgiasPreview: () => void;
+  onRunIntercomImport: () => void;
   onSaveAdminState: () => void;
   onSaveGorgiasApiKey: (apiKey: string) => void;
+  onSaveIntercomAccessToken: (apiKey: string) => void;
   onSaveProviderKey: (providerRouteId: string, apiKey: string) => void;
   onStyleGuidanceChange: (style: DraftStyle, value: string) => void;
   onWebSourceChange: (
@@ -66,11 +78,16 @@ export function AdminWorkspace({
   gorgiasConnectionStatus,
   gorgiasCredentialMessage,
   gorgiasPreviewMessage,
+  intercomConnectionStatus,
+  intercomCredentialMessage,
+  intercomImportMessage,
   isAdminDirty,
+  isRunningIntercomImport,
   isRunningGorgiasPreview,
   isSavingAdminState,
   isSavingCredential,
   isSavingGorgiasCredential,
+  isSavingIntercomCredential,
   knowledgeCards,
   onAddKnowledgeCard,
   onAddWebSource,
@@ -81,11 +98,14 @@ export function AdminWorkspace({
   onKnowledgeCardChange,
   onModelOverrideChange,
   onGorgiasFieldChange,
+  onIntercomFieldChange,
   onProfileChange,
   onProviderRouteChange,
   onRunGorgiasPreview,
+  onRunIntercomImport,
   onSaveAdminState,
   onSaveGorgiasApiKey,
+  onSaveIntercomAccessToken,
   onSaveProviderKey,
   onStyleGuidanceChange,
   onWebSourceChange,
@@ -97,6 +117,7 @@ export function AdminWorkspace({
     Record<string, string>
   >({});
   const [gorgiasKeyInput, setGorgiasKeyInput] = useState("");
+  const [intercomKeyInput, setIntercomKeyInput] = useState("");
 
   return (
     <section className="scroll-subtle min-h-[calc(100vh-1.5rem)] overflow-y-auto lg:col-span-2 xl:col-span-3">
@@ -310,6 +331,191 @@ export function AdminWorkspace({
                       </article>
                     );
                   })}
+                </div>
+              </section>
+
+              <section className="rounded-[18px] border border-[var(--border)] bg-[var(--white)] px-5 py-5 shadow-[0_16px_40px_rgba(17,24,39,0.05)]">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <div className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--text-soft)]">
+                      Intercom historical import
+                    </div>
+                    <div className="mt-1 text-[13px] text-[var(--text-soft)]">
+                      Bring prior conversations in as read-only context and eval fuel.
+                    </div>
+                  </div>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                      intercomConnectionStatus?.activeInRuntime
+                        ? "bg-[#dcfce7] text-[#15803d]"
+                        : intercomConnectionStatus?.savedToEnvFile
+                          ? "bg-[#fef3c7] text-[#b45309]"
+                          : "bg-[#fff1ec] text-[var(--orange)]"
+                    }`}
+                  >
+                    {intercomConnectionStatus?.activeInRuntime
+                      ? "Connected"
+                      : intercomConnectionStatus?.savedToEnvFile
+                        ? "Restart needed"
+                        : "Needs token"}
+                  </span>
+                </div>
+
+                {intercomCredentialMessage ? (
+                  <div className="mt-4 rounded-[12px] bg-[#fff1ec] px-4 py-3 text-[12px] leading-5 text-[var(--orange)]">
+                    {intercomCredentialMessage}
+                  </div>
+                ) : null}
+
+                {intercomImportMessage ? (
+                  <div className="mt-4 rounded-[12px] bg-[var(--surface)] px-4 py-3 text-[12px] leading-5 text-[var(--text-soft)]">
+                    {intercomImportMessage}
+                  </div>
+                ) : null}
+
+                <div className="mt-4 grid gap-3">
+                  <div className="grid gap-3 md:grid-cols-[120px_minmax(0,1fr)]">
+                    <label className="block">
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                        API region
+                      </span>
+                      <select
+                        value={state.intercom.region}
+                        onChange={(event) =>
+                          onIntercomFieldChange(
+                            "region",
+                            event.target.value as AdminState["intercom"]["region"],
+                          )
+                        }
+                        className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                      >
+                        <option value="us">US</option>
+                        <option value="eu">EU</option>
+                        <option value="au">AU</option>
+                      </select>
+                    </label>
+
+                    <label className="block">
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                        Inbox default
+                      </span>
+                      <select
+                        value={state.intercom.defaultInboxMode}
+                        onChange={(event) =>
+                          onIntercomFieldChange(
+                            "defaultInboxMode",
+                            event.target.value as AdminState["intercom"]["defaultInboxMode"],
+                          )
+                        }
+                        className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                      >
+                        <option value="mock">Mock inbox</option>
+                        <option value="intercom-history">Stored Intercom history when loaded</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <div className="grid gap-3 md:grid-cols-[120px_minmax(0,1fr)_minmax(0,1fr)]">
+                    <label className="block">
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                        Limit
+                      </span>
+                      <input
+                        type="number"
+                        min={1}
+                        max={50}
+                        value={state.intercom.conversationLimit}
+                        onChange={(event) =>
+                          onIntercomFieldChange(
+                            "conversationLimit",
+                            Number(event.target.value) || 1,
+                          )
+                        }
+                        className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                        Since
+                      </span>
+                      <input
+                        type="date"
+                        value={state.intercom.importedSince}
+                        onChange={(event) =>
+                          onIntercomFieldChange("importedSince", event.target.value)
+                        }
+                        className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                        Until
+                      </span>
+                      <input
+                        type="date"
+                        value={state.intercom.importedUntil}
+                        onChange={(event) =>
+                          onIntercomFieldChange("importedUntil", event.target.value)
+                        }
+                        className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                      />
+                    </label>
+                  </div>
+
+                  <div className="rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
+                    <div className="mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-soft)]">
+                      {intercomConnectionStatus?.tokenEnv ?? "INTERCOM_ACCESS_TOKEN"}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <input
+                        type="password"
+                        value={intercomKeyInput}
+                        onChange={(event) => setIntercomKeyInput(event.target.value)}
+                        placeholder="Paste Intercom private app access token"
+                        className="h-10 min-w-0 flex-1 rounded-[10px] border border-[var(--border)] bg-[var(--white)] px-3 text-[13px] outline-none transition placeholder:text-[var(--text-soft)] focus:border-[var(--orange)]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => onSaveIntercomAccessToken(intercomKeyInput)}
+                        disabled={isSavingIntercomCredential || !intercomKeyInput.trim()}
+                        className={`h-10 rounded-[10px] px-4 text-[12px] font-semibold text-white transition ${
+                          isSavingIntercomCredential || !intercomKeyInput.trim()
+                            ? "cursor-not-allowed bg-[#f1b8a6]"
+                            : "bg-[var(--orange)] hover:opacity-92"
+                        }`}
+                      >
+                        Save token
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={onRunIntercomImport}
+                    disabled={isRunningIntercomImport}
+                    className={`h-10 rounded-[10px] px-4 text-[13px] font-semibold text-white transition ${
+                      isRunningIntercomImport
+                        ? "cursor-not-allowed bg-[#373737]/60"
+                        : "bg-[#373737] hover:opacity-92"
+                    }`}
+                  >
+                    {isRunningIntercomImport
+                      ? "Importing Intercom history..."
+                      : "Import read-only history into inbox"}
+                  </button>
+
+                  {state.intercom.lastImportSummary ? (
+                    <div className="rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[12px] leading-5 text-[var(--text-soft)]">
+                      {state.intercom.lastImportSummary}
+                      {state.intercom.lastImportAt
+                        ? ` Last import: ${new Date(
+                            state.intercom.lastImportAt,
+                          ).toLocaleString()}.`
+                        : ""}
+                    </div>
+                  ) : null}
                 </div>
               </section>
 

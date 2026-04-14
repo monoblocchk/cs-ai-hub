@@ -32,6 +32,15 @@ export type AdminState = {
     lastPreviewAt: string;
     ticketLimit: number;
   };
+  intercom: {
+    conversationLimit: number;
+    defaultInboxMode: "intercom-history" | "mock";
+    importedSince: string;
+    importedUntil: string;
+    lastImportAt: string;
+    lastImportSummary: string;
+    region: "au" | "eu" | "us";
+  };
   knowledge: {
     cards: ManagedKnowledgeCard[];
     webSources: ManagedWebSource[];

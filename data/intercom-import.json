@@ -1,0 +1,86 @@
+{
+  "connectionSummary": "Imported 1 read-only Intercom conversations from US workspace history.",
+  "conversations": [
+    {
+      "channelId": "website-chat",
+      "customerHandle": "#69de6343e96fe717895233f6",
+      "customerMeta": "Historical Intercom conversation",
+      "customerName": "Intercom contact 69de6343e96fe717895233f6",
+      "drafts": {
+        "hype": [
+          {
+            "body": "Imported Intercom conversation",
+            "focus": "Imported history",
+            "id": "intercom-hype-1776189108744",
+            "label": "Hype"
+          }
+        ],
+        "sales": [
+          {
+            "body": "Imported Intercom conversation",
+            "focus": "Imported history",
+            "id": "intercom-sales-1776189108744",
+            "label": "Sales"
+          }
+        ],
+        "support": [
+          {
+            "body": "Imported Intercom conversation",
+            "focus": "Imported history",
+            "id": "intercom-support-1776189108744",
+            "label": "Support"
+          },
+          {
+            "body": "Imported Intercom conversation",
+            "focus": "Imported history",
+            "id": "intercom-short-1776189108744",
+            "label": "Short"
+          },
+          {
+            "body": "Imported Intercom conversation",
+            "focus": "Imported history",
+            "id": "intercom-formal-1776189108744",
+            "label": "Formal"
+          }
+        ]
+      },
+      "externalTicketId": "215473907285957",
+      "externalTicketUrl": "https://app.intercom.com/a/inbox/conversation/215473907285957",
+      "historical": true,
+      "id": "intercom-conversation-215473907285957",
+      "intent": "Historical Intercom thread",
+      "knowledgeIds": [],
+      "latestCustomerMessage": "Imported Intercom conversation",
+      "latestPreview": "Imported Intercom conversation",
+      "messages": [],
+      "nextBestAction": "Use this historical thread for drafting/evaluation context only; do not send from Intercom history.",
+      "priority": "High",
+      "readOnly": true,
+      "source": "intercom",
+      "sourceCustomerEmail": "",
+      "sourceCustomerId": "69de6343e96fe717895233f6",
+      "sourceLabel": "Intercom",
+      "status": "Needs reply",
+      "summary": "Historical Intercom thread. Imported from Intercom as read-only historical context.",
+      "tags": [
+        "intercom",
+        "historical",
+        "website-chat"
+      ],
+      "unreadCount": 1,
+      "updatedAt": "2 hr ago"
+    }
+  ],
+  "fetchedAt": "2026-04-14T17:51:48.744Z",
+  "totalCount": 1,
+  "rawConversationIds": [
+    "215473907285957"
+  ],
+  "request": {
+    "conversationLimit": 12,
+    "importedSince": "",
+    "importedUntil": "",
+    "region": "us"
+  },
+  "storedAt": "2026-04-14T17:51:48.744Z"
+}

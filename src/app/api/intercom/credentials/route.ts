@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { parseEnvFile, readEnvFile, writeEnvVariable } from "@/lib/server/env-file";
 
-const TOKEN_ENV = "GORGIAS_API_KEY";
+const TOKEN_ENV = "INTERCOM_ACCESS_TOKEN";
 
 async function buildStatus() {
   const envFileContent = await readEnvFile();
@@ -22,7 +22,7 @@ export async function GET() {
     connection: await buildStatus(),
     envFileName: ".env.local",
     restartHint:
-      "Restart the dev server after saving a new Gorgias API key so the runtime can pick it up.",
+      "Restart the dev server after saving a new Intercom access token so the runtime can pick it up.",
   });
 }
 
@@ -33,7 +33,7 @@ export async function POST(request: Request) {
 
     if (!apiKey) {
       return NextResponse.json(
-        { error: "Please paste a Gorgias API key before saving." },
+        { error: "Please paste an Intercom access token before saving." },
         { status: 400 },
       );
     }
@@ -48,7 +48,7 @@ export async function POST(request: Request) {
     const message =
       error instanceof Error
         ? error.message
-        : "Unable to save the Gorgias API key.";
+        : "Unable to save the Intercom access token.";
 
     return NextResponse.json({ error: message }, { status: 500 });
   }

@@ -47,3 +47,10 @@ Import old Intercom conversations into the normalized system as history, eval fu
 - private Intercom import works against the configured workspace
 - imported history is visible but clearly historical/read-only
 - imported records can improve eval coverage without requiring Gorgias
+
+## Current Implementation Notes
+- Intercom credentials are saved through `/api/intercom/credentials` using `INTERCOM_ACCESS_TOKEN` in `.env.local`
+- Intercom history import runs through `/api/intercom/import` and persists the latest import to `data/intercom-import.json`
+- Imported conversations are normalized to the shared `Conversation` shape with `source: "intercom"`, `historical: true`, and `readOnly: true`
+- Inbox and evaluation workspaces show source badges so imported Intercom conversations can be used as eval scenarios without becoming sendable live threads
+- Cross-source dedupe remains a later phase; the current phase preserves external IDs and customer identity hints but does not merge Intercom and Gorgias records

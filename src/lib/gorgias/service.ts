@@ -187,6 +187,7 @@ function normalizeConversation(
     priority: inferPriority(ticket.priority),
     readOnly: true,
     source: "gorgias",
+    sourceLabel: "Gorgias",
     status: inferStatus(ticket, messages),
     summary:
       ticket.subject ||

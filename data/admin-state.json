@@ -4,6 +4,8 @@
       "instagram-comments": "",
       "instagram-dm": "",
       "email": "",
+      "website-chat": "",
+      "facebook": "",
       "whatsapp": ""
     },
     "modelOverride": "",
@@ -17,61 +19,78 @@
       "hype": ""
     }
   },
+  "gorgias": {
+    "accountDomain": "",
+    "defaultInboxMode": "mock",
+    "email": "",
+    "lastConnectionSummary": "",
+    "lastPreviewAt": "",
+    "ticketLimit": 8
+  },
+  "intercom": {
+    "conversationLimit": 12,
+    "defaultInboxMode": "mock",
+    "importedSince": "",
+    "importedUntil": "",
+    "lastImportAt": "2026-04-14T17:51:48.744Z",
+    "lastImportSummary": "Imported 1 read-only Intercom conversations from US workspace history.",
+    "region": "us"
+  },
   "knowledge": {
     "cards": [
       {
+        "body": "Best for flexible webcam, light, and accessory positioning. Uses a 1/4 inch mount and is built for quick angle changes without redoing the whole setup.",
+        "freshness": "Synced 2 hrs ago",
         "id": "magic-arm-kit",
+        "source": "monoblocc.com/products/magic-arm-kit",
+        "sourceType": "web",
+        "status": "active",
         "title": "Magic Arm Kit",
         "type": "Product",
-        "freshness": "Synced 2 hrs ago",
-        "source": "monoblocc.com/products/magic-arm-kit",
-        "body": "Best for flexible webcam, light, and accessory positioning. Uses a 1/4 inch mount and is built for quick angle changes without redoing the whole setup.",
-        "sourceType": "web",
-        "status": "active",
         "updatedAt": "2026-04-10T00:00:00.000Z"
       },
       {
+        "body": "Cleaner footprint for compact desks and overhead shots. Easier choice when the customer wants a simple, fixed mounting path instead of a fully articulated arm.",
+        "freshness": "Synced today",
         "id": "single-rod-mount",
+        "source": "monoblocc.com/products/single-rod-mount",
+        "sourceType": "web",
+        "status": "active",
         "title": "Single Rod Mount",
         "type": "Product",
-        "freshness": "Synced today",
-        "source": "monoblocc.com/products/single-rod-mount",
-        "body": "Cleaner footprint for compact desks and overhead shots. Easier choice when the customer wants a simple, fixed mounting path instead of a fully articulated arm.",
-        "sourceType": "web",
-        "status": "active",
         "updatedAt": "2026-04-10T00:00:00.000Z"
       },
       {
+        "body": "Standard clamp fits most desks up to roughly 55 mm thickness. For thicker edges or lips, support should confirm desk profile before promising compatibility.",
+        "freshness": "Manual note",
         "id": "desk-clamp-fit",
+        "source": "Internal usage notes",
+        "sourceType": "manual",
+        "status": "active",
         "title": "Desk Clamp Fit Guide",
         "type": "Usage",
-        "freshness": "Manual note",
-        "source": "Internal usage notes",
-        "body": "Standard clamp fits most desks up to roughly 55 mm thickness. For thicker edges or lips, support should confirm desk profile before promising compatibility.",
-        "sourceType": "manual",
-        "status": "active",
         "updatedAt": "2026-04-10T00:00:00.000Z"
       },
       {
-        "id": "shipping-sla",
-        "title": "Shipping and Dispatch",
-        "type": "Policy",
-        "freshness": "Synced yesterday",
-        "source": "monoblocc.com/shipping",
         "body": "In-stock orders usually dispatch in 1 to 2 business days. Agents should avoid promising exact delivery dates when the courier handoff has not happened yet.",
+        "freshness": "Synced yesterday",
+        "id": "shipping-sla",
+        "source": "monoblocc.com/shipping",
         "sourceType": "web",
         "status": "active",
+        "title": "Shipping and Dispatch",
+        "type": "Policy",
         "updatedAt": "2026-04-10T00:00:00.000Z"
       },
       {
-        "id": "creator-bundle",
-        "title": "Creator Starter Bundle",
-        "type": "Product",
-        "freshness": "Manual note",
-        "source": "Internal merchandising notes",
         "body": "Bundle positioning: camera stability first, cable cleanliness second, modular add-ons later. Strong angle for creators upgrading from improvised desk rigs.",
+        "freshness": "Manual note",
+        "id": "creator-bundle",
+        "source": "Internal merchandising notes",
         "sourceType": "manual",
         "status": "active",
+        "title": "Creator Starter Bundle",
+        "type": "Product",
         "updatedAt": "2026-04-10T00:00:00.000Z"
       }
     ],
@@ -102,5 +121,5 @@
       }
     ]
   },
-  "updatedAt": "2026-04-10T00:00:00.000Z"
+  "updatedAt": "2026-04-14T17:51:48.759Z"
 }

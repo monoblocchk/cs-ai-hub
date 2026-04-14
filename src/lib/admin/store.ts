@@ -80,6 +80,15 @@ export function createDefaultAdminState(): AdminState {
       lastPreviewAt: "",
       ticketLimit: 8,
     },
+    intercom: {
+      conversationLimit: 12,
+      defaultInboxMode: "mock",
+      importedSince: "",
+      importedUntil: "",
+      lastImportAt: "",
+      lastImportSummary: "",
+      region: "us",
+    },
     knowledge: {
       cards: seedKnowledgeCards(),
       webSources: seedWebSources(),
@@ -154,6 +163,27 @@ export function normalizeAdminState(raw: Partial<AdminState> | null | undefined)
         raw.gorgias.ticketLimit <= 50
           ? raw.gorgias.ticketLimit
           : defaults.gorgias.ticketLimit,
+    },
+    intercom: {
+      conversationLimit:
+        typeof raw?.intercom?.conversationLimit === "number" &&
+        raw.intercom.conversationLimit >= 1 &&
+        raw.intercom.conversationLimit <= 50
+          ? raw.intercom.conversationLimit
+          : defaults.intercom.conversationLimit,
+      defaultInboxMode:
+        raw?.intercom?.defaultInboxMode === "intercom-history"
+          ? "intercom-history"
+          : defaults.intercom.defaultInboxMode,
+      importedSince: raw?.intercom?.importedSince ?? defaults.intercom.importedSince,
+      importedUntil: raw?.intercom?.importedUntil ?? defaults.intercom.importedUntil,
+      lastImportAt: raw?.intercom?.lastImportAt ?? defaults.intercom.lastImportAt,
+      lastImportSummary:
+        raw?.intercom?.lastImportSummary ?? defaults.intercom.lastImportSummary,
+      region:
+        raw?.intercom?.region === "eu" || raw?.intercom?.region === "au"
+          ? raw.intercom.region
+          : defaults.intercom.region,
     },
     knowledge: {
       cards: (raw?.knowledge?.cards ?? defaults.knowledge.cards).map((card) =>

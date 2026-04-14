@@ -26,6 +26,8 @@ export type Message = {
   body: string;
 };
 
+export type ConversationSource = "mock" | "gorgias" | "intercom";
+
 export type Conversation = {
   id: string;
   channelId: string;
@@ -47,8 +49,12 @@ export type Conversation = {
   drafts: Record<DraftMode, DraftVariant[]>;
   externalTicketId?: string;
   externalTicketUrl?: string;
+  historical?: boolean;
   readOnly?: boolean;
-  source?: "mock" | "gorgias";
+  source?: ConversationSource;
+  sourceCustomerEmail?: string;
+  sourceCustomerId?: string;
+  sourceLabel?: string;
 };
 
 export type KnowledgeCard = {
@@ -87,6 +93,24 @@ export const channels: Channel[] = [
     queueCount: 15,
     aiCoverage: "Off",
     responseTarget: "2 hrs",
+  },
+  {
+    id: "website-chat",
+    label: "Website Chat",
+    shortLabel: "CHAT",
+    description: "Historical Intercom Messenger and website chat threads.",
+    queueCount: 0,
+    aiCoverage: "History",
+    responseTarget: "Read-only",
+  },
+  {
+    id: "facebook",
+    label: "Facebook",
+    shortLabel: "FB",
+    description: "Meta conversations and comments surfaced through support tools.",
+    queueCount: 0,
+    aiCoverage: "Partial",
+    responseTarget: "15 min",
   },
   {
     id: "whatsapp",

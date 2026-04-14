@@ -1,75 +1,7 @@
-import { promises as fs } from "node:fs";
-import path from "node:path";
 import { NextResponse } from "next/server";
 import { PROVIDER_ROUTES } from "@/lib/ai/catalog";
 import type { ProviderConnectionStatus, ProviderRouteId } from "@/lib/ai/types";
-
-const ENV_FILE_PATH = path.join(process.cwd(), ".env.local");
-
-function parseEnvFile(content: string) {
-  const values = new Map<string, string>();
-
-  for (const line of content.split(/\r?\n/)) {
-    const trimmed = line.trim();
-
-    if (!trimmed || trimmed.startsWith("#")) {
-      continue;
-    }
-
-    const separatorIndex = trimmed.indexOf("=");
-
-    if (separatorIndex === -1) {
-      continue;
-    }
-
-    const key = trimmed.slice(0, separatorIndex).trim();
-    let value = trimmed.slice(separatorIndex + 1).trim();
-
-    if (
-      (value.startsWith('"') && value.endsWith('"')) ||
-      (value.startsWith("'") && value.endsWith("'"))
-    ) {
-      value = value.slice(1, -1);
-    }
-
-    values.set(key, value);
-  }
-
-  return values;
-}
-
-async function readEnvFile() {
-  try {
-    return await fs.readFile(ENV_FILE_PATH, "utf8");
-  } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
-      return "";
-    }
-
-    throw error;
-  }
-}
-
-async function writeEnvVariable(envName: string, value: string) {
-  const current = await readEnvFile();
-  const lines = current ? current.split(/\r?\n/) : [];
-  const nextLine = `${envName}=${JSON.stringify(value)}`;
-  const targetPattern = new RegExp(`^\\s*${envName}\\s*=`);
-  const existingIndex = lines.findIndex((line) => targetPattern.test(line));
-
-  if (existingIndex >= 0) {
-    lines[existingIndex] = nextLine;
-  } else {
-    if (lines.length > 0 && lines[lines.length - 1]?.trim() !== "") {
-      lines.push("");
-    }
-
-    lines.push(nextLine);
-  }
-
-  const content = `${lines.join("\n").replace(/\n*$/, "\n")}`;
-  await fs.writeFile(ENV_FILE_PATH, content, "utf8");
-}
+import { parseEnvFile, readEnvFile, writeEnvVariable } from "@/lib/server/env-file";
 
 async function buildProviderStatuses(): Promise<ProviderConnectionStatus[]> {
   const envFileContent = await readEnvFile();
