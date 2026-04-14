@@ -1,9 +1,9 @@
-# Monoblocc Gorgias Drafting App Spec v1
+# Monoblocc Customer Support AI Hub Spec v1
 
 ## Purpose
-Build an internal web app for Monoblocc that reads customer conversations from Gorgias, shows them in a dense operator-first inbox, and generates human-reviewed AI drafts inside the reply flow.
+Build an internal web app for Monoblocc that reads customer conversations from support platforms, shows them in a dense operator-first inbox, and generates human-reviewed AI drafts inside the reply flow.
 
-The system is not an autonomous chatbot in v1. It drafts, the user reviews, and the user sends.
+Gorgias is the intended live helpdesk. Intercom can be used as a historical source and bridge before the Gorgias subscription/live rollout is complete. The system is not an autonomous chatbot in v1. It drafts, the user reviews, and the user sends.
 
 ## Product Outcome
 The operator can:
@@ -15,6 +15,7 @@ The operator can:
 5. See draft options directly inside the thread.
 6. Click a draft bubble to send immediately, or click the pen icon to load it into the editor first.
 7. Ground replies on product knowledge and saved guidance without copying anything into a separate AI tool.
+8. Import historical Intercom conversations as training/evaluation memory without confusing them with live actionable Gorgias threads.
 
 ## Primary Users
 - Primary user: Wolfgang / Monoblocc internal operator
@@ -22,6 +23,7 @@ The operator can:
 
 ## Core Scope v1
 - Read conversations from Gorgias across supported channels
+- Read/import conversations from Intercom as a private internal connector
 - Store normalized thread and message history
 - Draft responses from full thread context plus product knowledge
 - Let the user edit or send drafts manually
@@ -35,6 +37,39 @@ The operator can:
 - No live self-training loop that rewrites prompts after every message
 - No full CRM or helpdesk replacement
 - No moderation actions unless public Gorgias API support is documented and verified
+- No public Intercom app marketplace release in v1
+- No fine-tuning requirement before retrieval, summaries, macros, and evals have been tested
+
+## Source and Channel Model
+`Source` and `channel` are separate dimensions.
+
+- `Source`: where the record came from, for example `mock`, `intercom`, or `gorgias`
+- `Channel`: the customer-facing surface, for example `email`, `instagram-dm`, `instagram-comment`, `whatsapp`, or `chat`
+
+The UI should keep the operator workflow channel-first while showing source context as a secondary badge.
+
+### Source UI Requirements
+- Conversation rows show a small source badge/logo: `Intercom`, `Gorgias`, or `Mock`
+- Thread headers show whether the record is `Historical`, `Read-only preview`, or `Live in Gorgias`
+- The inbox supports source filters: `All`, `Gorgias`, `Intercom`, `Historical`
+- Historical Intercom records are not sendable unless mapped to a live Gorgias thread
+- Possible duplicates should be marked as `Possible duplicate` rather than auto-hidden
+- High-confidence merged records can show as `Merged history` while preserving raw source records internally
+
+### Deduping and Identity
+Keep raw external records, then create normalized views on top.
+
+Suggested matching signals:
+- customer email
+- phone number
+- Instagram handle or other social handle
+- customer name
+- order ID or subject tokens
+- message timestamp proximity
+- message text similarity
+- migration metadata if Gorgias preserves Intercom IDs
+
+If confidence is high, show one normalized conversation with merged history. If confidence is medium, show a warning or manual merge affordance. If confidence is low, keep records separate.
 
 ## UX Requirements
 
@@ -142,10 +177,34 @@ Later this can become configurable in admin settings.
 - Retrieved snippets shown in the right rail
 - Retrieval is over the knowledge base, not the full message archive, in v1
 
+## Historical Conversation Memory
+Imported Intercom history should improve drafting without dumping full archives into every prompt.
+
+Use:
+- customer-level summaries
+- intent-level summaries
+- approved good-response examples
+- macro candidates
+- product/policy facts extracted from recurring answers
+- eval scenarios from real old conversations
+- channel and style guide suggestions
+
+Do not:
+- include hundreds of historical messages in each generation prompt
+- treat unreviewed historical text as guaranteed policy truth
+- fine-tune a model before retrieval and eval-based prompting have been tested
+
+The first Intercom import phase should focus on getting data in, normalizing it, and making it available for review/evals. Automated macro and style-guide generation can follow after the import contract is stable.
+
 ## Data Model Summary
 - `channels`
+- `source_accounts`
+- `external_conversations`
+- `customer_identities`
+- `dedupe_groups`
 - `conversations`
 - `messages`
+- `conversation_memory`
 - `draft_generations`
 - `draft_variants`
 - `knowledge_sources`
@@ -186,9 +245,11 @@ Recommended task-level profiles:
 1. UI and mock data shell
 2. AI on template/mock conversations
 3. Knowledge and guidance controls
-4. Gorgias read sync
-5. Send through Gorgias
-6. Evals, analytics, and provider experiments
+4. Evals, analytics, and provider experiments on mock/template data
+5. Intercom historical import
+6. Gorgias read sync
+7. Send through Gorgias
+8. Cross-source dedupe and memory layer
 
 ## References
 - See [model-provider-strategy.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/model-provider-strategy.md)

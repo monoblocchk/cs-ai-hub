@@ -14,18 +14,22 @@ Run implementation in narrow slices so future agents can work longer with less c
 1. [phase-01-ui-and-mock-data.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-01-ui-and-mock-data.md)
 2. [phase-02-ai-drafting-on-template-data.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-02-ai-drafting-on-template-data.md)
 3. [phase-03-knowledge-and-guidance.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-03-knowledge-and-guidance.md)
-4. [phase-04-gorgias-read-sync.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-04-gorgias-read-sync.md)
-5. [phase-05-send-actions-and-audit.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-05-send-actions-and-audit.md)
-6. [phase-06-evals-ops-and-experiments.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-06-evals-ops-and-experiments.md)
+4. [phase-04-evals-ops-and-experiments.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-04-evals-ops-and-experiments.md)
+5. [phase-05-intercom-historical-import.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-05-intercom-historical-import.md)
+6. [phase-06-gorgias-read-sync.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-06-gorgias-read-sync.md)
+7. [phase-07-send-actions-and-audit.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-07-send-actions-and-audit.md)
+8. [phase-08-cross-source-memory-and-dedupe.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-08-cross-source-memory-and-dedupe.md)
 
 ## Handoff Rules
 - At the end of each phase, write down assumptions in code comments or docs only when they affect the next phase
 - Keep provider, model, and prompt policy identifiers explicit
+- Keep source and channel as separate fields
+- Preserve raw external records even when normalized conversations are merged
 - Avoid hidden behavior or magic defaults
 
 ## Context Minimization
 - UI work should not require reading Gorgias docs files
-- Gorgias sync work should not require reading every UI refinement
+- Intercom and Gorgias sync work should not require reading every UI refinement
 - Evals work should consume normalized logs instead of raw thread implementation details
 
 ## If a Phase Is Blocked

@@ -1,4 +1,8 @@
-# Phase 4: Gorgias Read Sync
+# Superseded: Gorgias Read Sync Moved to Phase 6
+
+This file is retained for backward compatibility. Use [phase-06-gorgias-read-sync.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-06-gorgias-read-sync.md) for current implementation instructions.
+
+# Former Phase 4: Gorgias Read Sync
 
 ## Goal
 Replace mock conversation input with real Gorgias data while keeping the UI and AI contract stable.

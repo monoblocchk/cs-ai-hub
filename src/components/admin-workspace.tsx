@@ -4,6 +4,7 @@ import { useState } from "react";
 import { MODEL_PROFILES, PROVIDER_ROUTES } from "@/lib/ai/catalog";
 import type { DraftStyle, ProviderConnectionStatus } from "@/lib/ai/types";
 import type { AdminState, ManagedKnowledgeCard, ManagedWebSource } from "@/lib/admin/types";
+import type { GorgiasConnectionStatus } from "@/lib/gorgias/types";
 import type { Channel } from "@/lib/mock-data";
 
 const STYLE_FIELDS: Array<{ key: DraftStyle; label: string }> = [
@@ -18,9 +19,14 @@ type AdminWorkspaceProps = {
   adminSaveMessage: string | null;
   channels: Channel[];
   credentialMessage: string | null;
+  gorgiasConnectionStatus: GorgiasConnectionStatus | null;
+  gorgiasCredentialMessage: string | null;
+  gorgiasPreviewMessage: string | null;
   isAdminDirty: boolean;
+  isRunningGorgiasPreview: boolean;
   isSavingAdminState: boolean;
   isSavingCredential: boolean;
+  isSavingGorgiasCredential: boolean;
   knowledgeCards: ManagedKnowledgeCard[];
   onAddKnowledgeCard: () => void;
   onAddWebSource: () => void;
@@ -33,9 +39,15 @@ type AdminWorkspaceProps = {
     patch: Partial<ManagedKnowledgeCard>,
   ) => void;
   onModelOverrideChange: (value: string) => void;
+  onGorgiasFieldChange: (
+    field: keyof AdminState["gorgias"],
+    value: AdminState["gorgias"][keyof AdminState["gorgias"]],
+  ) => void;
   onProviderRouteChange: (value: AdminState["ai"]["providerRouteId"]) => void;
   onProfileChange: (value: AdminState["ai"]["profileId"]) => void;
+  onRunGorgiasPreview: () => void;
   onSaveAdminState: () => void;
+  onSaveGorgiasApiKey: (apiKey: string) => void;
   onSaveProviderKey: (providerRouteId: string, apiKey: string) => void;
   onStyleGuidanceChange: (style: DraftStyle, value: string) => void;
   onWebSourceChange: (
@@ -51,9 +63,14 @@ export function AdminWorkspace({
   adminSaveMessage,
   channels,
   credentialMessage,
+  gorgiasConnectionStatus,
+  gorgiasCredentialMessage,
+  gorgiasPreviewMessage,
   isAdminDirty,
+  isRunningGorgiasPreview,
   isSavingAdminState,
   isSavingCredential,
+  isSavingGorgiasCredential,
   knowledgeCards,
   onAddKnowledgeCard,
   onAddWebSource,
@@ -63,9 +80,12 @@ export function AdminWorkspace({
   onDeleteWebSource,
   onKnowledgeCardChange,
   onModelOverrideChange,
+  onGorgiasFieldChange,
   onProfileChange,
   onProviderRouteChange,
+  onRunGorgiasPreview,
   onSaveAdminState,
+  onSaveGorgiasApiKey,
   onSaveProviderKey,
   onStyleGuidanceChange,
   onWebSourceChange,
@@ -76,6 +96,7 @@ export function AdminWorkspace({
   const [credentialInputs, setCredentialInputs] = useState<
     Record<string, string>
   >({});
+  const [gorgiasKeyInput, setGorgiasKeyInput] = useState("");
 
   return (
     <section className="scroll-subtle min-h-[calc(100vh-1.5rem)] overflow-y-auto lg:col-span-2 xl:col-span-3">
@@ -289,6 +310,169 @@ export function AdminWorkspace({
                       </article>
                     );
                   })}
+                </div>
+              </section>
+
+              <section className="rounded-[18px] border border-[var(--border)] bg-[var(--white)] px-5 py-5 shadow-[0_16px_40px_rgba(17,24,39,0.05)]">
+                <div className="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <div className="mono text-[11px] uppercase tracking-[0.18em] text-[var(--text-soft)]">
+                      Gorgias read-only sync
+                    </div>
+                    <div className="mt-1 text-[13px] text-[var(--text-soft)]">
+                      Configure the first live inbox preview without enabling send.
+                    </div>
+                  </div>
+                  <span
+                    className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                      gorgiasConnectionStatus?.activeInRuntime
+                        ? "bg-[#dcfce7] text-[#15803d]"
+                        : gorgiasConnectionStatus?.savedToEnvFile
+                          ? "bg-[#fef3c7] text-[#b45309]"
+                          : "bg-[#fff1ec] text-[var(--orange)]"
+                    }`}
+                  >
+                    {gorgiasConnectionStatus?.activeInRuntime
+                      ? "Connected"
+                      : gorgiasConnectionStatus?.savedToEnvFile
+                        ? "Restart needed"
+                        : "Needs API key"}
+                  </span>
+                </div>
+
+                {gorgiasCredentialMessage ? (
+                  <div className="mt-4 rounded-[12px] bg-[#fff1ec] px-4 py-3 text-[12px] leading-5 text-[var(--orange)]">
+                    {gorgiasCredentialMessage}
+                  </div>
+                ) : null}
+
+                {gorgiasPreviewMessage ? (
+                  <div className="mt-4 rounded-[12px] bg-[var(--surface)] px-4 py-3 text-[12px] leading-5 text-[var(--text-soft)]">
+                    {gorgiasPreviewMessage}
+                  </div>
+                ) : null}
+
+                <div className="mt-4 grid gap-3">
+                  <label className="block">
+                    <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                      Account domain
+                    </span>
+                    <input
+                      value={state.gorgias.accountDomain}
+                      onChange={(event) =>
+                        onGorgiasFieldChange("accountDomain", event.target.value)
+                      }
+                      placeholder="monoblocc or monoblocc.gorgias.com"
+                      className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition placeholder:text-[var(--text-soft)] focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                    />
+                  </label>
+
+                  <label className="block">
+                    <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                      Gorgias login email
+                    </span>
+                    <input
+                      value={state.gorgias.email}
+                      onChange={(event) =>
+                        onGorgiasFieldChange("email", event.target.value)
+                      }
+                      placeholder="support@monoblocc.com"
+                      className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition placeholder:text-[var(--text-soft)] focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                    />
+                  </label>
+
+                  <div className="grid gap-3 md:grid-cols-[140px_minmax(0,1fr)]">
+                    <label className="block">
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                        Ticket limit
+                      </span>
+                      <input
+                        type="number"
+                        min={1}
+                        max={20}
+                        value={state.gorgias.ticketLimit}
+                        onChange={(event) =>
+                          onGorgiasFieldChange(
+                            "ticketLimit",
+                            Number(event.target.value) || 1,
+                          )
+                        }
+                        className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                      />
+                    </label>
+
+                    <label className="block">
+                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--text)]">
+                        Inbox default
+                      </span>
+                      <select
+                        value={state.gorgias.defaultInboxMode}
+                        onChange={(event) =>
+                          onGorgiasFieldChange(
+                            "defaultInboxMode",
+                            event.target.value as AdminState["gorgias"]["defaultInboxMode"],
+                          )
+                        }
+                        className="mt-2 h-11 w-full rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-3 text-[13px] outline-none transition focus:border-[var(--orange)] focus:bg-[var(--white)]"
+                      >
+                        <option value="mock">Mock inbox</option>
+                        <option value="gorgias-preview">Gorgias preview when loaded</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <div className="rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-4 py-3">
+                    <div className="mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-soft)]">
+                      {gorgiasConnectionStatus?.tokenEnv ?? "GORGIAS_API_KEY"}
+                    </div>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <input
+                        type="password"
+                        value={gorgiasKeyInput}
+                        onChange={(event) => setGorgiasKeyInput(event.target.value)}
+                        placeholder="Paste Gorgias private app API key"
+                        className="h-10 min-w-0 flex-1 rounded-[10px] border border-[var(--border)] bg-[var(--white)] px-3 text-[13px] outline-none transition placeholder:text-[var(--text-soft)] focus:border-[var(--orange)]"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => onSaveGorgiasApiKey(gorgiasKeyInput)}
+                        disabled={isSavingGorgiasCredential || !gorgiasKeyInput.trim()}
+                        className={`h-10 rounded-[10px] px-4 text-[12px] font-semibold text-white transition ${
+                          isSavingGorgiasCredential || !gorgiasKeyInput.trim()
+                            ? "cursor-not-allowed bg-[#f1b8a6]"
+                            : "bg-[var(--orange)] hover:opacity-92"
+                        }`}
+                      >
+                        Save key
+                      </button>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={onRunGorgiasPreview}
+                    disabled={isRunningGorgiasPreview}
+                    className={`h-10 rounded-[10px] px-4 text-[13px] font-semibold text-white transition ${
+                      isRunningGorgiasPreview
+                        ? "cursor-not-allowed bg-[#373737]/60"
+                        : "bg-[#373737] hover:opacity-92"
+                    }`}
+                  >
+                    {isRunningGorgiasPreview
+                      ? "Loading Gorgias preview..."
+                      : "Load read-only preview into inbox"}
+                  </button>
+
+                  {state.gorgias.lastConnectionSummary ? (
+                    <div className="rounded-[12px] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[12px] leading-5 text-[var(--text-soft)]">
+                      {state.gorgias.lastConnectionSummary}
+                      {state.gorgias.lastPreviewAt
+                        ? ` Last preview: ${new Date(
+                            state.gorgias.lastPreviewAt,
+                          ).toLocaleString()}.`
+                        : ""}
+                    </div>
+                  ) : null}
                 </div>
               </section>
             </div>

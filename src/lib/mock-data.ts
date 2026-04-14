@@ -45,6 +45,10 @@ export type Conversation = {
   knowledgeIds: string[];
   messages: Message[];
   drafts: Record<DraftMode, DraftVariant[]>;
+  externalTicketId?: string;
+  externalTicketUrl?: string;
+  readOnly?: boolean;
+  source?: "mock" | "gorgias";
 };
 
 export type KnowledgeCard = {

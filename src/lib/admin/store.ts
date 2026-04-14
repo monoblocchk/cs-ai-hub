@@ -72,6 +72,14 @@ export function createDefaultAdminState(): AdminState {
       providerRouteId: "mock",
       styleGuidance: createEmptyStyleGuidance(),
     },
+    gorgias: {
+      accountDomain: "",
+      defaultInboxMode: "mock",
+      email: "",
+      lastConnectionSummary: "",
+      lastPreviewAt: "",
+      ticketLimit: 8,
+    },
     knowledge: {
       cards: seedKnowledgeCards(),
       webSources: seedWebSources(),
@@ -129,6 +137,23 @@ export function normalizeAdminState(raw: Partial<AdminState> | null | undefined)
         ...defaults.ai.styleGuidance,
         ...(raw?.ai?.styleGuidance ?? {}),
       },
+    },
+    gorgias: {
+      accountDomain: raw?.gorgias?.accountDomain ?? defaults.gorgias.accountDomain,
+      defaultInboxMode:
+        raw?.gorgias?.defaultInboxMode === "gorgias-preview"
+          ? "gorgias-preview"
+          : defaults.gorgias.defaultInboxMode,
+      email: raw?.gorgias?.email ?? defaults.gorgias.email,
+      lastConnectionSummary:
+        raw?.gorgias?.lastConnectionSummary ?? defaults.gorgias.lastConnectionSummary,
+      lastPreviewAt: raw?.gorgias?.lastPreviewAt ?? defaults.gorgias.lastPreviewAt,
+      ticketLimit:
+        typeof raw?.gorgias?.ticketLimit === "number" &&
+        raw.gorgias.ticketLimit >= 1 &&
+        raw.gorgias.ticketLimit <= 50
+          ? raw.gorgias.ticketLimit
+          : defaults.gorgias.ticketLimit,
     },
     knowledge: {
       cards: (raw?.knowledge?.cards ?? defaults.knowledge.cards).map((card) =>

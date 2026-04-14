@@ -24,6 +24,10 @@ import type {
   ManagedWebSource,
 } from "@/lib/admin/types";
 import type { EvalExperiment, EvalRunResult, EvalState } from "@/lib/evals/types";
+import type {
+  GorgiasConnectionStatus,
+  GorgiasPreviewResponse,
+} from "@/lib/gorgias/types";
 import {
   channels,
   conversations,
@@ -157,6 +161,14 @@ function createFallbackAdminState(): AdminState {
       providerRouteId: "mock",
       styleGuidance: createEmptyStyleGuidance(),
     },
+    gorgias: {
+      accountDomain: "",
+      defaultInboxMode: "mock",
+      email: "",
+      lastConnectionSummary: "",
+      lastPreviewAt: "",
+      ticketLimit: 8,
+    },
     knowledge: {
       cards: createFallbackKnowledgeCards(),
       webSources: [
@@ -271,6 +283,9 @@ const FALLBACK_EVAL_STATE = createFallbackEvalState();
 
 export function InboxWorkspace() {
   const [conversationData, setConversationData] = useState(conversations);
+  const [conversationSource, setConversationSource] = useState<
+    "mock" | "gorgias-preview"
+  >("mock");
   const [selectedChannelId, setSelectedChannelId] = useState(channels[0].id);
   const [selectedConversationId, setSelectedConversationId] = useState(
     conversations[0].id,
@@ -295,17 +310,28 @@ export function InboxWorkspace() {
   const [providerStatuses, setProviderStatuses] = useState<
     ProviderConnectionStatus[]
   >([]);
+  const [gorgiasConnectionStatus, setGorgiasConnectionStatus] =
+    useState<GorgiasConnectionStatus | null>(null);
   const [credentialMessage, setCredentialMessage] = useState<string | null>(
     null,
   );
+  const [gorgiasCredentialMessage, setGorgiasCredentialMessage] = useState<
+    string | null
+  >(null);
   const [adminSaveMessage, setAdminSaveMessage] = useState<string | null>(null);
   const [evalSaveMessage, setEvalSaveMessage] = useState<string | null>(null);
+  const [gorgiasPreviewMessage, setGorgiasPreviewMessage] = useState<
+    string | null
+  >(null);
   const [isLoadingAdminState, setIsLoadingAdminState] = useState(true);
   const [isLoadingEvalState, setIsLoadingEvalState] = useState(true);
   const [isSavingAdminState, setIsSavingAdminState] = useState(false);
   const [isSavingEvalState, setIsSavingEvalState] = useState(false);
   const [isRunningEvaluations, setIsRunningEvaluations] = useState(false);
   const [isSavingCredential, setIsSavingCredential] = useState(false);
+  const [isSavingGorgiasCredential, setIsSavingGorgiasCredential] =
+    useState(false);
+  const [isRunningGorgiasPreview, setIsRunningGorgiasPreview] = useState(false);
   const [savedAdminSnapshot, setSavedAdminSnapshot] = useState(() =>
     serializeAdminState(FALLBACK_ADMIN_STATE),
   );
@@ -327,6 +353,7 @@ export function InboxWorkspace() {
     void loadAdminState();
     void loadEvalState();
     void refreshProviderStatuses();
+    void refreshGorgiasStatus();
   }, []);
 
   const activeChannel =
@@ -589,6 +616,28 @@ export function InboxWorkspace() {
     }
   }
 
+  async function refreshGorgiasStatus() {
+    try {
+      const response = await fetch("/api/gorgias/credentials");
+
+      if (!response.ok) {
+        throw new Error("Unable to load Gorgias connection status.");
+      }
+
+      const payload = (await response.json()) as {
+        connection?: GorgiasConnectionStatus;
+      };
+
+      setGorgiasConnectionStatus(payload.connection ?? null);
+    } catch (error) {
+      setGorgiasCredentialMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to load Gorgias connection status.",
+      );
+    }
+  }
+
   function populateEditor(body: string) {
     setEditorText(body);
     requestAnimationFrame(() => {
@@ -598,7 +647,7 @@ export function InboxWorkspace() {
   }
 
   function sendReply(body: string) {
-    if (!selectedConversation || !body.trim()) {
+    if (!selectedConversation || !body.trim() || selectedConversation.readOnly) {
       return;
     }
 
@@ -785,9 +834,11 @@ export function InboxWorkspace() {
     }
   }
 
-  async function handleSaveAdminState() {
-    if (!isAdminDirty) {
-      return;
+  async function handleSaveAdminState(nextState?: AdminState) {
+    const targetState = nextState ?? adminState;
+
+    if (!nextState && !isAdminDirty) {
+      return true;
     }
 
     setIsSavingAdminState(true);
@@ -799,7 +850,7 @@ export function InboxWorkspace() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(adminState),
+        body: JSON.stringify(targetState),
       });
 
       const payload = (await response.json()) as AdminState | { error?: string };
@@ -812,18 +863,20 @@ export function InboxWorkspace() {
         );
       }
 
-      const nextState = payload as AdminState;
+      const persistedState = payload as AdminState;
 
-      setAdminState(nextState);
-      setSavedAdminSnapshot(serializeAdminState(nextState));
+      setAdminState(persistedState);
+      setSavedAdminSnapshot(serializeAdminState(persistedState));
       setDraftCache({});
       setAdminSaveMessage("Admin state saved successfully.");
+      return true;
     } catch (error) {
       setAdminSaveMessage(
         error instanceof Error
           ? error.message
           : "Unable to save admin state.",
       );
+      return false;
     } finally {
       setIsSavingAdminState(false);
     }
@@ -863,6 +916,20 @@ export function InboxWorkspace() {
     }));
     setAdminSaveMessage(null);
     setGenerationError(null);
+  }
+
+  function handleGorgiasFieldChange(
+    field: keyof AdminState["gorgias"],
+    value: AdminState["gorgias"][keyof AdminState["gorgias"]],
+  ) {
+    setAdminState((current) => ({
+      ...current,
+      gorgias: {
+        ...current.gorgias,
+        [field]: value,
+      },
+    }));
+    setAdminSaveMessage(null);
   }
 
   function handleChannelGuidanceChange(channelId: string, value: string) {
@@ -1014,6 +1081,109 @@ export function InboxWorkspace() {
       },
     }));
     setAdminSaveMessage(null);
+  }
+
+  async function handleSaveGorgiasApiKey(apiKey: string) {
+    setIsSavingGorgiasCredential(true);
+    setGorgiasCredentialMessage(null);
+
+    try {
+      const response = await fetch("/api/gorgias/credentials", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ apiKey }),
+      });
+
+      const payload = (await response.json()) as {
+        connection?: GorgiasConnectionStatus;
+        error?: string;
+        message?: string;
+      };
+
+      if (!response.ok) {
+        throw new Error(payload.error ?? "Unable to save Gorgias API key.");
+      }
+
+      setGorgiasConnectionStatus(payload.connection ?? null);
+      setGorgiasCredentialMessage(
+        payload.message ??
+          "Gorgias API key saved. Restart the dev server to activate it.",
+      );
+    } catch (error) {
+      setGorgiasCredentialMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to save Gorgias API key.",
+      );
+    } finally {
+      setIsSavingGorgiasCredential(false);
+    }
+  }
+
+  async function handleRunGorgiasPreview() {
+    setIsRunningGorgiasPreview(true);
+    setGorgiasPreviewMessage(null);
+
+    try {
+      const response = await fetch("/api/gorgias/preview", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          accountDomain: adminState.gorgias.accountDomain,
+          email: adminState.gorgias.email,
+          ticketLimit: adminState.gorgias.ticketLimit,
+        }),
+      });
+
+      const payload = (await response.json()) as
+        | GorgiasPreviewResponse
+        | { error?: string };
+
+      if (!response.ok || "error" in payload) {
+        throw new Error(
+          "error" in payload && payload.error
+            ? payload.error
+            : "Unable to load the Gorgias preview.",
+        );
+      }
+
+      const preview = payload as GorgiasPreviewResponse;
+      const nextState: AdminState = {
+        ...adminState,
+        gorgias: {
+          ...adminState.gorgias,
+          lastConnectionSummary: preview.connectionSummary,
+          lastPreviewAt: preview.fetchedAt,
+        },
+      };
+
+      setConversationData(preview.conversations);
+      setConversationSource("gorgias-preview");
+      setSelectedChannelId(preview.conversations[0]?.channelId ?? channels[0].id);
+      setSelectedConversationId(
+        preview.conversations[0]?.id ?? conversations[0]?.id ?? "",
+      );
+      setSearchTerm("");
+      setEditorText("");
+      setGenerationError(null);
+      setAdminState(nextState);
+      setGorgiasPreviewMessage(preview.connectionSummary);
+      setViewMode("inbox");
+
+      await handleSaveAdminState(nextState);
+    } catch (error) {
+      setGorgiasPreviewMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to load the Gorgias preview.",
+      );
+    } finally {
+      setIsRunningGorgiasPreview(false);
+    }
   }
 
   async function handleSaveEvalState(nextState?: EvalState) {
@@ -1229,6 +1399,55 @@ export function InboxWorkspace() {
     }
   }
 
+  async function handlePromoteEvalResult(runId: string, resultId: string) {
+    const run = evalState.runs.find((entry) => entry.id === runId);
+    const result = run?.results.find((entry) => entry.experimentId === resultId);
+
+    if (!run || !result) {
+      setEvalSaveMessage("Unable to find the selected evaluation result.");
+      return;
+    }
+
+    const existingChannelGuidance =
+      adminState.ai.channelGuidanceByChannelId[run.channelId] ?? "";
+    const promotedGuidance = result.additionalGuidance.trim();
+    const nextChannelGuidance = promotedGuidance
+      ? existingChannelGuidance.includes(promotedGuidance)
+        ? existingChannelGuidance
+        : [existingChannelGuidance, promotedGuidance]
+            .map((value) => value.trim())
+            .filter(Boolean)
+            .join("\n\n")
+      : existingChannelGuidance;
+
+    const nextAdminState: AdminState = {
+      ...adminState,
+      ai: {
+        ...adminState.ai,
+        channelGuidanceByChannelId: {
+          ...adminState.ai.channelGuidanceByChannelId,
+          [run.channelId]: nextChannelGuidance,
+        },
+        modelOverride: result.modelOverride,
+        profileId: result.profileId,
+        providerRouteId: result.providerRouteId,
+      },
+    };
+
+    setAdminState(nextAdminState);
+    const saved = await handleSaveAdminState(nextAdminState);
+
+    if (saved) {
+      setEvalSaveMessage(
+        `Promoted ${result.experimentLabel} into the admin baseline.`,
+      );
+    } else {
+      setEvalSaveMessage(
+        `Promoted ${result.experimentLabel} locally, but saving the admin baseline failed.`,
+      );
+    }
+  }
+
   const channelCounts = channels.map((channel) => ({
     id: channel.id,
     openCount: conversationData.filter(
@@ -1351,6 +1570,33 @@ export function InboxWorkspace() {
                   {evalState.runs.length}
                 </div>
               </button>
+
+              {conversationSource === "gorgias-preview" ? (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setConversationData(conversations);
+                    setConversationSource("mock");
+                    setSelectedChannelId(channels[0].id);
+                    setSelectedConversationId(conversations[0].id);
+                    setSearchTerm("");
+                    setEditorText("");
+                    setGenerationError(null);
+                    setGorgiasPreviewMessage("Returned the inbox to mock conversations.");
+                  }}
+                  className="flex w-full items-center justify-between rounded-[10px] border border-transparent px-3 py-3 text-left text-white/72 transition hover:bg-white/6 hover:text-white"
+                >
+                  <div>
+                    <div className="text-[13px] font-medium">Use mock inbox</div>
+                    <div className="mt-1 text-[12px] text-white/45">
+                      Exit the live read-only preview
+                    </div>
+                  </div>
+                  <div className="mono rounded-full bg-white/8 px-2 py-1 text-[11px] text-white/72">
+                    live
+                  </div>
+                </button>
+              ) : null}
             </div>
           </div>
         </aside>
@@ -1367,9 +1613,14 @@ export function InboxWorkspace() {
                 adminSaveMessage={adminSaveMessage}
                 channels={channels}
                 credentialMessage={credentialMessage}
+                gorgiasConnectionStatus={gorgiasConnectionStatus}
+                gorgiasCredentialMessage={gorgiasCredentialMessage}
+                gorgiasPreviewMessage={gorgiasPreviewMessage}
                 isAdminDirty={isAdminDirty}
+                isRunningGorgiasPreview={isRunningGorgiasPreview}
                 isSavingAdminState={isSavingAdminState}
                 isSavingCredential={isSavingCredential}
+                isSavingGorgiasCredential={isSavingGorgiasCredential}
                 knowledgeCards={managedKnowledgeCards}
                 onAddKnowledgeCard={handleAddKnowledgeCard}
                 onAddWebSource={handleAddWebSource}
@@ -1377,11 +1628,14 @@ export function InboxWorkspace() {
                 onChannelGuidanceChange={handleChannelGuidanceChange}
                 onDeleteKnowledgeCard={handleDeleteKnowledgeCard}
                 onDeleteWebSource={handleDeleteWebSource}
+                onGorgiasFieldChange={handleGorgiasFieldChange}
                 onKnowledgeCardChange={handleKnowledgeCardChange}
                 onModelOverrideChange={handleModelOverrideChange}
                 onProfileChange={handleProfileChange}
                 onProviderRouteChange={handleProviderRouteChange}
+                onRunGorgiasPreview={handleRunGorgiasPreview}
                 onSaveAdminState={handleSaveAdminState}
+                onSaveGorgiasApiKey={handleSaveGorgiasApiKey}
                 onSaveProviderKey={handleSaveProviderKey}
                 onStyleGuidanceChange={handleStyleGuidanceChange}
                 onWebSourceChange={handleWebSourceChange}
@@ -1411,6 +1665,7 @@ export function InboxWorkspace() {
                 onBackToInbox={() => setViewMode("inbox")}
                 onDeleteExperiment={handleDeleteEvalExperiment}
                 onExperimentChange={handleEvalExperimentChange}
+                onPromoteResult={handlePromoteEvalResult}
                 onResultChange={handleEvalResultChange}
                 onRunEvaluations={handleRunEvaluations}
                 onSaveEvalState={() => void handleSaveEvalState()}
@@ -1541,6 +1796,11 @@ export function InboxWorkspace() {
                     </div>
 
                     <div className="flex items-center gap-2">
+                      {selectedConversation.readOnly ? (
+                        <span className="rounded-full bg-[#fef3c7] px-2.5 py-1 text-[11px] font-semibold text-[#b45309]">
+                          Read-only preview
+                        </span>
+                      ) : null}
                       <StatusBadge status={selectedConversation.status} />
                       <PriorityBadge priority={selectedConversation.priority} />
                     </div>
@@ -1564,6 +1824,7 @@ export function InboxWorkspace() {
                           draftChoices.map((draft) => (
                             <DraftBubble
                               key={draft.key}
+                              canSend={!selectedConversation.readOnly}
                               draft={draft}
                               onEdit={() => populateEditor(draft.body)}
                               onRegenerate={() =>
@@ -1619,6 +1880,12 @@ export function InboxWorkspace() {
                     <div className="mt-3 flex flex-wrap justify-end gap-2">
                       <button
                         type="button"
+                        onClick={() => {
+                          if (selectedConversation.externalTicketUrl) {
+                            window.open(selectedConversation.externalTicketUrl, "_blank", "noopener,noreferrer");
+                          }
+                        }}
+                        disabled={!selectedConversation.externalTicketUrl}
                         className="h-10 rounded-[10px] border border-[var(--border)] bg-[var(--white)] px-4 text-[13px] font-medium text-[var(--text)] transition hover:bg-[var(--surface)]"
                       >
                         Open in Gorgias
@@ -1626,14 +1893,16 @@ export function InboxWorkspace() {
                       <button
                         type="button"
                         onClick={() => sendReply(editorText)}
-                        disabled={!editorText.trim()}
+                        disabled={!editorText.trim() || Boolean(selectedConversation.readOnly)}
                         className={`h-10 rounded-[10px] px-4 text-[13px] font-semibold text-white transition ${
-                          editorText.trim()
+                          editorText.trim() && !selectedConversation.readOnly
                             ? "bg-[var(--orange)] hover:opacity-92"
                             : "cursor-not-allowed bg-[#f1b8a6]"
                         }`}
                       >
-                        Send to Gorgias
+                        {selectedConversation.readOnly
+                          ? "Read-only preview"
+                          : "Send to Gorgias"}
                       </button>
                     </div>
                   </div>
@@ -1875,12 +2144,14 @@ function DraftSkeleton() {
 }
 
 function DraftBubble({
+  canSend,
   draft,
   onEdit,
   onRegenerate,
   onSend,
   isRegenerating,
 }: {
+  canSend: boolean;
   draft: DraftCandidate;
   onEdit: () => void;
   onRegenerate: () => void;
@@ -1893,10 +2164,11 @@ function DraftBubble({
         <button
           type="button"
           onClick={onSend}
+          disabled={!canSend}
           className={`relative flex-1 rounded-[12px] px-4 py-3 text-left transition ${
             draft.recommended
-              ? "bg-[var(--orange-soft)] [--draft-outline-color:var(--orange)] hover:opacity-92"
-              : "bg-[var(--white)] [--draft-outline-color:var(--border)] hover:bg-[var(--orange-soft)] hover:[--draft-outline-color:var(--orange)]"
+              ? "bg-[var(--orange-soft)] [--draft-outline-color:var(--orange)] hover:opacity-92 disabled:cursor-not-allowed disabled:opacity-70"
+              : "bg-[var(--white)] [--draft-outline-color:var(--border)] hover:bg-[var(--orange-soft)] hover:[--draft-outline-color:var(--orange)] disabled:cursor-not-allowed disabled:opacity-70"
           }`}
         >
           <svg
@@ -1930,6 +2202,11 @@ function DraftBubble({
           <p className="mt-2 text-[13px] leading-5 text-[var(--text-soft)]">
             {draft.body}
           </p>
+          {!canSend ? (
+            <div className="mt-3 text-[11px] font-medium uppercase tracking-[0.12em] text-[var(--text-soft)]">
+              Draft only in read-only preview
+            </div>
+          ) : null}
         </button>
 
         <div className="mt-2 flex shrink-0 flex-col gap-2">

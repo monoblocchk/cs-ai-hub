@@ -1,4 +1,8 @@
-# Phase 6: Evals, Ops, and Experiments
+# Superseded: Evals, Ops, and Experiments Moved to Phase 4
+
+This file is retained for backward compatibility. Use [phase-04-evals-ops-and-experiments.md](D:/OneDrive/Monoblocc%20CS%20AI%20Hub/docs/agents/phase-04-evals-ops-and-experiments.md) for current implementation instructions.
+
+# Former Phase 6: Evals, Ops, and Experiments
 
 ## Goal
 Improve quality, speed, and cost with evidence.

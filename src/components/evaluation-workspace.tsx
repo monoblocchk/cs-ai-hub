@@ -32,6 +32,7 @@ type EvaluationWorkspaceProps = {
     experimentId: string,
     patch: Partial<EvalExperiment>,
   ) => void;
+  onPromoteResult: (runId: string, resultId: string) => void;
   onResultChange: (
     runId: string,
     resultId: string,
@@ -108,6 +109,7 @@ export function EvaluationWorkspace({
   onBackToInbox,
   onDeleteExperiment,
   onExperimentChange,
+  onPromoteResult,
   onResultChange,
   onRunEvaluations,
   onSaveEvalState,
@@ -652,18 +654,66 @@ export function EvaluationWorkspace({
                                 <div className="mono text-[11px] uppercase tracking-[0.16em] text-[var(--text-soft)]">
                                   Human score
                                 </div>
-                                <button
-                                  type="button"
-                                  onClick={() => onSetWinner(selectedRun.id, result.experimentId)}
-                                  className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
-                                    result.winner
-                                      ? "bg-[var(--orange)] text-white"
-                                      : "bg-[var(--surface)] text-[var(--text-soft)] hover:bg-[#fff1ec] hover:text-[var(--orange)]"
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <button
+                                    type="button"
+                                    onClick={() => onPromoteResult(selectedRun.id, result.experimentId)}
+                                    className="rounded-full bg-[#373737] px-3 py-1 text-[11px] font-semibold text-white transition hover:opacity-92"
+                                  >
+                                    Promote to baseline
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => onSetWinner(selectedRun.id, result.experimentId)}
+                                    className={`rounded-full px-3 py-1 text-[11px] font-semibold transition ${
+                                      result.winner
+                                        ? "bg-[var(--orange)] text-white"
+                                        : "bg-[var(--surface)] text-[var(--text-soft)] hover:bg-[#fff1ec] hover:text-[var(--orange)]"
+                                    }`}
+                                  >
+                                    {result.winner ? "Winner" : "Mark winner"}
+                                  </button>
+                                </div>
+                              </div>
+
+                              <div className="mt-3 flex flex-wrap gap-2">
+                                <span
+                                  className={`rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                                    result.response.diagnostics.usedFallback
+                                      ? "bg-[#fff1ec] text-[var(--orange)]"
+                                      : "bg-[#dcfce7] text-[#15803d]"
                                   }`}
                                 >
-                                  {result.winner ? "Winner" : "Mark winner"}
-                                </button>
+                                  {result.response.diagnostics.usedFallback
+                                    ? "Fallback"
+                                    : "Live model"}
+                                </span>
+                                <span className="rounded-full bg-[var(--surface)] px-2.5 py-1 text-[11px] text-[var(--text-soft)]">
+                                  {result.response.diagnostics.providerLabel}
+                                </span>
+                                <span className="rounded-full bg-[var(--surface)] px-2.5 py-1 text-[11px] text-[var(--text-soft)]">
+                                  {result.response.diagnostics.profileLabel}
+                                </span>
                               </div>
+
+                              {result.response.diagnostics.warning ? (
+                                <div className="mt-3 rounded-[10px] bg-[#fff1ec] px-3 py-2 text-[12px] leading-5 text-[var(--orange)]">
+                                  {result.response.diagnostics.warning}
+                                </div>
+                              ) : null}
+
+                              {result.response.diagnostics.guidanceNotes.length ? (
+                                <div className="mt-3 flex flex-wrap gap-2">
+                                  {result.response.diagnostics.guidanceNotes.map((note) => (
+                                    <span
+                                      key={note}
+                                      className="rounded-full bg-[var(--surface)] px-2.5 py-1 text-[11px] text-[var(--text-soft)]"
+                                    >
+                                      {note}
+                                    </span>
+                                  ))}
+                                </div>
+                              ) : null}
 
                               <div className="mt-3 flex flex-wrap gap-2">
                                 {[1, 2, 3, 4, 5].map((score) => (

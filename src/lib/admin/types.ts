@@ -24,6 +24,14 @@ export type AdminState = {
     providerRouteId: ProviderRouteId;
     styleGuidance: Record<DraftStyle, string>;
   };
+  gorgias: {
+    accountDomain: string;
+    defaultInboxMode: "mock" | "gorgias-preview";
+    email: string;
+    lastConnectionSummary: string;
+    lastPreviewAt: string;
+    ticketLimit: number;
+  };
   knowledge: {
     cards: ManagedKnowledgeCard[];
     webSources: ManagedWebSource[];
